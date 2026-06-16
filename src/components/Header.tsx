@@ -14,8 +14,8 @@ export function Header() {
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-muted-foreground">
-          <a href="#servicos" className="hover:text-foreground transition-colors">Serviços</a>
-          <a href="#como-funciona" className="hover:text-foreground transition-colors">Como funciona</a>
+          <Link to="/" hash="servicos" className="hover:text-foreground transition-colors">Serviços</Link>
+          <Link to="/" hash="como-funciona" className="hover:text-foreground transition-colors">Como funciona</Link>
           <Link to="/auth" className="hover:text-foreground transition-colors">Admin</Link>
         </nav>
       </div>

@@ -12,6 +12,7 @@ const serviceQuery = (slug: string) =>
   queryOptions({
     queryKey: ["service", slug],
     queryFn: () => getServiceBySlug({ data: { slug } }),
+    staleTime: 5 * 60_000,
   });
 
 export const Route = createFileRoute("/servico/$slug")({
