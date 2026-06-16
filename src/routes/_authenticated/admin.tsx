@@ -127,8 +127,19 @@ function AdminPage() {
 
   async function changeStatus(id: string, status: any) {
     try {
-      await updateFn({ data: { id, status } });
-      toast.success("Status atualizado");
+      const res: any = await updateFn({ data: { id, status } });
+      toast.success(res?.deleted ? "Pedido finalizado e removido" : "Status atualizado");
+      qc.invalidateQueries({ queryKey: ["admin-orders"] });
+    } catch (e: any) {
+      toast.error(e?.message ?? "Erro");
+    }
+  }
+
+  async function removeOrder(id: string, code: string) {
+    if (!confirm(`Apagar pedido ${code}? Esta ação é permanente.`)) return;
+    try {
+      await deleteFn({ data: { id } });
+      toast.success("Pedido apagado");
       qc.invalidateQueries({ queryKey: ["admin-orders"] });
     } catch (e: any) {
       toast.error(e?.message ?? "Erro");
