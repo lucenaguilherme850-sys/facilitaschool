@@ -150,10 +150,30 @@ export const adminUpdateOrderStatus = createServerFn({ method: "POST" })
       _role: "admin",
     });
     if (!isAdmin) throw new Error("Forbidden");
+    // Concluído ou cancelado: remove do painel
+    if (data.status === "completed" || data.status === "cancelled") {
+      const { error } = await context.supabase.from("orders").delete().eq("id", data.id);
+      if (error) throw new Error(error.message);
+      return { ok: true, deleted: true };
+    }
     const { error } = await context.supabase
       .from("orders")
       .update({ status: data.status })
       .eq("id", data.id);
+    if (error) throw new Error(error.message);
+    return { ok: true, deleted: false };
+  });
+
+export const adminDeleteOrder = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) => z.object({ id: z.string().uuid() }).parse(d))
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { error } = await context.supabase.from("orders").delete().eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
   });
