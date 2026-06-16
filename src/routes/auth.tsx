@@ -57,8 +57,8 @@ function AuthPage() {
     <>
       <Background />
       <Header />
-      <div className="mx-auto max-w-md px-6 py-20">
-        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-8 animate-fade-up">
+      <div className="mx-auto max-w-md px-4 sm:px-6 py-12 sm:py-20">
+        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-6 sm:p-8 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Painel Admin</div>
           <h1 className="font-display text-3xl mb-2">{mode === "signin" ? "Entrar" : "Criar conta"}</h1>
           <p className="text-sm text-muted-foreground mb-6">Acesso restrito ao administrador.</p>

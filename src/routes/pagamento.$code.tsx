@@ -129,12 +129,12 @@ function PaymentPage() {
         </div>
 
         {/* WHATSAPP */}
-        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-8 animate-fade-up">
-          <h2 className="font-display text-2xl mb-1">Envie o comprovante pelo WhatsApp</h2>
+        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-8 animate-fade-up">
+          <h2 className="font-display text-xl sm:text-2xl mb-1">Envie o comprovante pelo WhatsApp</h2>
           <p className="text-sm text-muted-foreground mb-6">Toque no botão abaixo — abrimos o WhatsApp com a mensagem já preenchida. Basta anexar a foto/PDF do comprovante e enviar.</p>
 
-          <a href="#whatsapp-comprovante" onClick={openWhatsApp} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold px-5 py-3.5 hover:brightness-110 transition">
-            <MessageCircle className="h-5 w-5" /> Abrir WhatsApp: {WHATSAPP_DISPLAY}
+          <a href="#whatsapp-comprovante" onClick={openWhatsApp} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold px-4 py-3.5 text-sm sm:text-base hover:brightness-110 transition text-center break-all">
+            <MessageCircle className="h-5 w-5 shrink-0" /> <span>Abrir WhatsApp: {WHATSAPP_DISPLAY}</span>
           </a>
           <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
             <ShieldCheck className="h-4 w-4 text-gold shrink-0" />
