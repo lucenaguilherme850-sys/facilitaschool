@@ -9,6 +9,7 @@ import { listServices } from "@/lib/orders.functions";
 const servicesQuery = queryOptions({
   queryKey: ["services"],
   queryFn: () => listServices(),
+  staleTime: 5 * 60_000,
 });
 
 export const Route = createFileRoute("/")({
