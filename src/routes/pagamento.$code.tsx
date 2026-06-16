@@ -144,40 +144,25 @@ function PaymentPage() {
 
           <ol className="space-y-2 text-sm text-muted-foreground mb-2">
             <li>1. Abra o app do seu banco e faça um Pix para a chave acima.</li>
-            <li>2. Envie o comprovante abaixo <span className="text-foreground">+</span> mande no WhatsApp com o código.</li>
+            <li>2. Mande o comprovante no nosso WhatsApp junto com o código do pedido.</li>
             <li>3. Assim que confirmarmos, iniciamos seu serviço.</li>
           </ol>
         </div>
 
-        {/* UPLOAD */}
+        {/* WHATSAPP */}
         <div className="rounded-2xl bg-card shadow-card border border-border/60 p-8 animate-fade-up">
-          <h2 className="font-display text-2xl mb-1">Envie o comprovante</h2>
-          <p className="text-sm text-muted-foreground mb-6">Aceita imagem ou PDF (máx 8 MB).</p>
+          <h2 className="font-display text-2xl mb-1">Envie o comprovante pelo WhatsApp</h2>
+          <p className="text-sm text-muted-foreground mb-6">Toque no botão abaixo — abrimos o WhatsApp com a mensagem já preenchida. Basta anexar a foto/PDF do comprovante e enviar.</p>
 
-          {sent ? (
-            <div className="rounded-lg border border-gold/40 bg-gold/5 p-5 flex items-center gap-3">
-              <ShieldCheck className="h-5 w-5 text-gold" />
-              <div>
-                <div className="font-medium">Comprovante recebido</div>
-                <div className="text-sm text-muted-foreground">Estamos revisando. Status: <span className="text-foreground">{order.status}</span></div>
-              </div>
-            </div>
-          ) : (
-            <label className={`flex flex-col items-center justify-center gap-3 rounded-xl border-2 border-dashed border-border bg-input/40 px-6 py-12 cursor-pointer hover:border-gold transition-colors ${uploading ? "opacity-60 pointer-events-none" : ""}`}>
-              <input type="file" accept="image/*,application/pdf" className="hidden" onChange={handleUpload} disabled={uploading} />
-              <Upload className="h-8 w-8 text-gold" />
-              <div className="text-center">
-                <div className="font-medium">{uploading ? "Enviando..." : "Clique para enviar o comprovante"}</div>
-                <div className="text-xs text-muted-foreground mt-1">PNG, JPG ou PDF</div>
-              </div>
-            </label>
-          )}
-
-          <a href={waAppLink} onClick={openWhatsApp} className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-primary-foreground font-semibold px-5 py-3 hover:brightness-105 transition">
-            <MessageCircle className="h-5 w-5" /> Enviar pelo WhatsApp: {WHATSAPP_DISPLAY}
+          <a href={waAppLink} onClick={openWhatsApp} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold px-5 py-3.5 hover:brightness-110 transition">
+            <MessageCircle className="h-5 w-5" /> Abrir WhatsApp: {WHATSAPP_DISPLAY}
           </a>
-          <p className="text-xs text-muted-foreground text-center mt-3">Recomendado: enviar pelo site E pelo WhatsApp.</p>
+          <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
+            <ShieldCheck className="h-4 w-4 text-gold shrink-0" />
+            Assim que recebermos seu comprovante, confirmamos e iniciamos o serviço.
+          </div>
         </div>
+
       </div>
 
       <style>{`
