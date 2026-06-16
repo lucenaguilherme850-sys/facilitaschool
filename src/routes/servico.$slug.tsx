@@ -32,7 +32,7 @@ const SERVICE_FORMS: Record<string, { fields: ServiceField[]; quantityField?: st
     fields: [
       { type: "text", name: "login", label: "LOGIN (E-mail @aluno.educa.go.gov.br)", placeholder: "seu.nome@aluno.educa.go.gov.br", required: true },
       { type: "password", name: "senha", label: "Senha", required: true },
-      { type: "number", name: "quantidade", label: "Quantidade de níveis/certificados", help: "Quantos níveis/certificados deseja completar?", min: 1, max: 20 },
+      { type: "number", name: "quantidade", label: "Quantidade de níveis/certificados", help: "Quantos níveis/certificados deseja completar? (máx. 16)", min: 1, max: 16 },
     ],
     quantityField: "quantidade",
   },

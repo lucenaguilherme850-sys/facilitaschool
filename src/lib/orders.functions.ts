@@ -48,7 +48,7 @@ const createOrderSchema = z.object({
   service_slug: z.string().min(1).max(64),
   customer_name: z.string().trim().min(2).max(120),
   customer_contact: z.string().trim().min(5).max(160),
-  quantity: z.number().int().min(1).max(50),
+  quantity: z.number().int().min(1).max(16),
   form_data: z.record(z.string(), z.any()),
   notes: z.string().max(500).optional().nullable(),
 });
