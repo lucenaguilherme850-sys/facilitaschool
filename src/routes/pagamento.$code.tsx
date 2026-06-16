@@ -1,13 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useServerFn } from "@tanstack/react-start";
-import { queryOptions, useSuspenseQuery, useQueryClient } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
-import { Copy, Check, Upload, MessageCircle, ShieldCheck } from "lucide-react";
+import { Copy, Check, MessageCircle, ShieldCheck } from "lucide-react";
 import { toast } from "sonner";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
-import { getOrderByCode, attachProof } from "@/lib/orders.functions";
-import { supabase } from "@/integrations/supabase/client";
+import { getOrderByCode } from "@/lib/orders.functions";
 
 const PIX_KEY = "64999611088";
 const WHATSAPP = "5564999611088";
@@ -31,10 +29,7 @@ function fmt(cents: number) {
 function PaymentPage() {
   const { code } = Route.useParams();
   const { data: order } = useSuspenseQuery(orderQuery(code));
-  const qc = useQueryClient();
-  const attachFn = useServerFn(attachProof);
   const [copied, setCopied] = useState<string | null>(null);
-  const [uploading, setUploading] = useState(false);
 
   if (!order) {
     return (
