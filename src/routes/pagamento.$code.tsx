@@ -50,28 +50,6 @@ function PaymentPage() {
     setTimeout(() => setCopied(null), 1500);
   }
 
-  async function handleUpload(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    if (file.size > 8 * 1024 * 1024) { toast.error("Arquivo muito grande (máx 8MB)"); return; }
-    setUploading(true);
-    try {
-      const ext = file.name.split(".").pop() ?? "bin";
-      const path = `${code}/${Date.now()}.${ext}`;
-      const { error } = await supabase.storage.from("proofs").upload(path, file, {
-        contentType: file.type,
-        upsert: false,
-      });
-      if (error) throw error;
-      await attachFn({ data: { code, proof_url: path } });
-      toast.success("Comprovante enviado! Em breve confirmaremos.");
-      qc.invalidateQueries({ queryKey: ["order", code] });
-    } catch (err: any) {
-      toast.error(err?.message ?? "Erro ao enviar comprovante");
-    } finally {
-      setUploading(false);
-    }
-  }
 
   const waMessage = encodeURIComponent(
     `Olá! Acabei de pagar o serviço *${order.service_name}*.\nCódigo do pedido: *${order.public_code}*\nValor: ${fmt(order.amount_cents)}\nSegue o comprovante 📎`,
