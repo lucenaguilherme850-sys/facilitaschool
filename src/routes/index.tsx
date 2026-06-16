@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
-import { ArrowRight, Lock, Zap, ShieldCheck } from "lucide-react";
+import { ArrowRight, Lock, Zap, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { Reveal } from "@/components/Reveal";
