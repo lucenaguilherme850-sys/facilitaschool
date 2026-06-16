@@ -3,9 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search } from "lucide-react";
+import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search, Trash2 } from "lucide-react";
 import { Background } from "@/components/Background";
-import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin } from "@/lib/orders.functions";
+import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin, adminDeleteOrder } from "@/lib/orders.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -73,12 +73,14 @@ function AdminPage() {
   const updateFn = useServerFn(adminUpdateOrderStatus);
   const signFn = useServerFn(adminGetProofSignedUrl);
   const checkFn = useServerFn(checkIsAdmin);
+  const deleteFn = useServerFn(adminDeleteOrder);
 
   const adminCheck = useQuery({ queryKey: ["isAdmin"], queryFn: () => checkFn() });
   const ordersQ = useQuery({
     queryKey: ["admin-orders"],
     queryFn: () => listFn(),
     enabled: adminCheck.data?.isAdmin === true,
+    refetchInterval: 30_000,
   });
 
   const [expanded, setExpanded] = useState<string | null>(null);
@@ -125,8 +127,19 @@ function AdminPage() {
 
   async function changeStatus(id: string, status: any) {
     try {
-      await updateFn({ data: { id, status } });
-      toast.success("Status atualizado");
+      const res: any = await updateFn({ data: { id, status } });
+      toast.success(res?.deleted ? "Pedido finalizado e removido" : "Status atualizado");
+      qc.invalidateQueries({ queryKey: ["admin-orders"] });
+    } catch (e: any) {
+      toast.error(e?.message ?? "Erro");
+    }
+  }
+
+  async function removeOrder(id: string, code: string) {
+    if (!confirm(`Apagar pedido ${code}? Esta ação é permanente.`)) return;
+    try {
+      await deleteFn({ data: { id } });
+      toast.success("Pedido apagado");
       qc.invalidateQueries({ queryKey: ["admin-orders"] });
     } catch (e: any) {
       toast.error(e?.message ?? "Erro");
@@ -221,6 +234,9 @@ function AdminPage() {
                     <select value={o.status} onChange={(e) => changeStatus(o.id, e.target.value)} className="bg-input border border-border rounded-lg px-3 py-1.5 text-sm">
                       {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                     </select>
+                    <button onClick={() => removeOrder(o.id, o.public_code)} title="Apagar pedido" className="ui-icon-btn hover:!border-red-500/60 hover:!text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                     <button onClick={() => setExpanded(open ? null : o.id)} className="ui-icon-btn">
                       {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </button>
