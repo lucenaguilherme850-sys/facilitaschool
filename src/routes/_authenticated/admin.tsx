@@ -166,11 +166,14 @@ function AdminPage() {
     <>
       <Background />
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/60">
-        <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="font-display text-xl">Facilit<span className="text-gold">.</span><span className="text-muted-foreground text-sm ml-3">Admin</span></Link>
-          <div className="flex items-center gap-2">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between gap-3">
+          <Link to="/" className="font-display text-lg sm:text-xl truncate min-w-0">
+            Facilit<span className="text-gold">.</span>
+            <span className="text-muted-foreground text-xs sm:text-sm ml-2 sm:ml-3">Admin</span>
+          </Link>
+          <div className="flex items-center gap-2 shrink-0">
             <button onClick={() => downloadCSV(filtered)} className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-card hover:border-gold hover:text-gold text-sm">
-              <Download className="h-4 w-4" /> Exportar CSV
+              <Download className="h-4 w-4" /> <span className="hidden sm:inline">Exportar CSV</span>
             </button>
             <button onClick={() => qc.invalidateQueries({ queryKey: ["admin-orders"] })} className="ui-icon-btn"><RefreshCcw className="h-4 w-4" /></button>
             <button onClick={logout} className="ui-icon-btn"><LogOut className="h-4 w-4" /></button>
@@ -178,9 +181,9 @@ function AdminPage() {
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-6 py-8">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
         {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 mb-6">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6">
           <StatCard label="Total" value={stats.total} />
           <StatCard label="A pagar" value={stats.pending_payment} accent="yellow" />
           <StatCard label="Para revisar" value={stats.awaiting_review} accent="blue" />
@@ -190,20 +193,20 @@ function AdminPage() {
         </div>
 
         {/* Filters */}
-        <div className="flex flex-wrap gap-3 mb-5">
-          <div className="relative flex-1 min-w-[240px]">
+        <div className="flex flex-col sm:flex-row gap-3 mb-5">
+          <div className="relative flex-1 min-w-0">
             <Search className="h-4 w-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <input
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              placeholder="Buscar código, cliente, contato, serviço..."
+              placeholder="Buscar código, cliente, contato..."
               className="w-full bg-input border border-border rounded-lg pl-10 pr-3 py-2 text-sm focus:border-gold outline-none"
             />
           </div>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-input border border-border rounded-lg px-3 py-2 text-sm"
+            className="bg-input border border-border rounded-lg px-3 py-2 text-sm w-full sm:w-auto"
           >
             <option value="all">Todos os status</option>
             {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
@@ -217,21 +220,27 @@ function AdminPage() {
             const open = expanded === o.id;
             return (
               <div key={o.id} className="rounded-xl bg-card border border-border/60 overflow-hidden">
-                <div className="p-4 flex flex-wrap items-center gap-3">
-                  <button onClick={() => copy(o.public_code, "Código copiado")} className="font-mono text-gold tracking-wider hover:opacity-80 inline-flex items-center gap-1.5">
-                    {o.public_code} <Copy className="h-3 w-3 opacity-60" />
-                  </button>
-                  <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-md border ${STATUS_COLOR[o.status]}`}>{STATUS_LABEL[o.status]}</span>
-                  <div className="font-medium">{o.service_name}</div>
-                  <div className="text-sm text-muted-foreground">
-                    {o.customer_name} ·{" "}
-                    <button onClick={() => copy(o.customer_contact, "Contato copiado")} className="hover:text-gold inline-flex items-center gap-1">
-                      {o.customer_contact} <Copy className="h-3 w-3" />
+                <div className="p-4 grid gap-3 lg:grid-cols-[auto_auto_1fr_auto] lg:items-center">
+                  {/* Code + status */}
+                  <div className="flex flex-wrap items-center gap-2 min-w-0">
+                    <button onClick={() => copy(o.public_code, "Código copiado")} className="font-mono text-gold tracking-wider hover:opacity-80 inline-flex items-center gap-1.5">
+                      {o.public_code} <Copy className="h-3 w-3 opacity-60" />
+                    </button>
+                    <span className={`text-[11px] uppercase tracking-wider px-2 py-0.5 rounded-md border ${STATUS_COLOR[o.status]}`}>{STATUS_LABEL[o.status]}</span>
+                  </div>
+                  {/* Service */}
+                  <div className="font-medium truncate">{o.service_name}</div>
+                  {/* Customer */}
+                  <div className="text-sm text-muted-foreground min-w-0 break-words">
+                    <span className="font-medium text-foreground">{o.customer_name}</span>{" · "}
+                    <button onClick={() => copy(o.customer_contact, "Contato copiado")} className="hover:text-gold inline-flex items-center gap-1 break-all">
+                      {o.customer_contact} <Copy className="h-3 w-3 shrink-0" />
                     </button>
                   </div>
-                  <div className="ml-auto flex items-center gap-3">
-                    <span className="text-gold font-medium">{fmt(o.amount_cents)}</span>
-                    <select value={o.status} onChange={(e) => changeStatus(o.id, e.target.value)} className="bg-input border border-border rounded-lg px-3 py-1.5 text-sm">
+                  {/* Actions */}
+                  <div className="flex flex-wrap items-center gap-2 lg:gap-3 lg:justify-end">
+                    <span className="text-gold font-medium whitespace-nowrap">{fmt(o.amount_cents)}</span>
+                    <select value={o.status} onChange={(e) => changeStatus(o.id, e.target.value)} className="bg-input border border-border rounded-lg px-2 py-1.5 text-sm min-w-0 flex-1 sm:flex-none">
                       {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                     </select>
                     <button onClick={() => removeOrder(o.id, o.public_code)} title="Apagar pedido" className="ui-icon-btn hover:!border-red-500/60 hover:!text-red-400">
