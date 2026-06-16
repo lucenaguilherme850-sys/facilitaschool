@@ -4,6 +4,7 @@ import { queryOptions } from "@tanstack/react-query";
 import { ArrowRight, Lock, Zap, ShieldCheck } from "lucide-react";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
+import { Reveal } from "@/components/Reveal";
 import { listServices } from "@/lib/orders.functions";
 
 const servicesQuery = queryOptions({
