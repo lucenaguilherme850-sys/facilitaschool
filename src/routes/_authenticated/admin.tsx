@@ -9,7 +9,7 @@ import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkI
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Painel Admin — Executa" }] }),
+  head: () => ({ meta: [{ title: "Painel Admin — Faclit" }] }),
   component: AdminPage,
 });
 
