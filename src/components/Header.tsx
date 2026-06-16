@@ -10,7 +10,7 @@ export function Header() {
             <Sparkles className="h-4 w-4 text-primary-foreground" />
           </div>
           <span className="font-display text-xl tracking-tight">
-            Executa<span className="text-gold">.</span>
+            Faclit<span className="text-gold">.</span>
           </span>
         </Link>
         <nav className="flex items-center gap-6 text-sm text-muted-foreground">
