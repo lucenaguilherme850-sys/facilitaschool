@@ -64,7 +64,7 @@ function PaymentPage() {
     window.location.href = waAppLink;
   }
 
-  const sent = order.status !== "pending_payment";
+  
 
   return (
     <>
