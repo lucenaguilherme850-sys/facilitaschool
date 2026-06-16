@@ -80,7 +80,21 @@ function PaymentPage() {
   const waMessage = encodeURIComponent(
     `Olá! Acabei de pagar o serviço *${order.service_name}*.\nCódigo do pedido: *${order.public_code}*\nValor: ${fmt(order.amount_cents)}\nSegue o comprovante 📎`,
   );
-  const waLink = `https://wa.me/${WHATSAPP}?text=${waMessage}`;
+  const waText = decodeURIComponent(waMessage);
+  const waWebLink = `https://web.whatsapp.com/send?phone=${WHATSAPP}&text=${waMessage}`;
+
+  function openWhatsApp(e: React.MouseEvent<HTMLAnchorElement>) {
+    e.preventDefault();
+    navigator.clipboard.writeText(waText).catch(() => undefined);
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    if (isMobile) {
+      window.location.href = `whatsapp://send?phone=${WHATSAPP}&text=${waMessage}`;
+      setTimeout(() => window.open(waWebLink, "_blank", "noopener,noreferrer"), 900);
+      return;
+    }
+    window.open(waWebLink, "_blank", "noopener,noreferrer") ?? window.location.assign(waWebLink);
+    toast.success("Mensagem copiada. Se o WhatsApp não abrir, cole a mensagem manualmente.");
+  }
 
   const sent = order.status !== "pending_payment";
 
@@ -164,7 +178,7 @@ function PaymentPage() {
             </label>
           )}
 
-          <a href={waLink} target="_blank" rel="noopener" className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-primary-foreground font-semibold px-5 py-3 hover:brightness-105 transition">
+          <a href={waWebLink} onClick={openWhatsApp} target="_blank" rel="noopener" className="mt-5 w-full inline-flex items-center justify-center gap-2 rounded-xl bg-gold text-primary-foreground font-semibold px-5 py-3 hover:brightness-105 transition">
             <MessageCircle className="h-5 w-5" /> Enviar pelo WhatsApp também
           </a>
           <p className="text-xs text-muted-foreground text-center mt-3">Recomendado: enviar pelo site E pelo WhatsApp.</p>
