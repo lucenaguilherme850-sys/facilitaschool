@@ -16,18 +16,42 @@ export function Reveal({ children, delay = 0, variant = "default", as = "div", c
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    if (typeof IntersectionObserver === "undefined") { setVisible(true); return; }
+
+    // Fallback: garante que aparece mesmo se IO falhar
+    const fallback = window.setTimeout(() => setVisible(true), 600);
+
+    if (typeof IntersectionObserver === "undefined") {
+      setVisible(true);
+      return () => window.clearTimeout(fallback);
+    }
+
     const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setVisible(true);
-          io.disconnect();
+      (entries) => {
+        for (const e of entries) {
+          if (e.isIntersecting) {
+            setVisible(true);
+            io.disconnect();
+            window.clearTimeout(fallback);
+            break;
+          }
         }
       },
-      { threshold: 0.12, rootMargin: "0px 0px -10% 0px" }
+      { threshold: 0.05 }
     );
     io.observe(el);
-    return () => io.disconnect();
+
+    // Se já está visível na montagem, força imediatamente
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setVisible(true);
+      io.disconnect();
+      window.clearTimeout(fallback);
+    }
+
+    return () => {
+      io.disconnect();
+      window.clearTimeout(fallback);
+    };
   }, []);
 
   const Tag = as as "div";
