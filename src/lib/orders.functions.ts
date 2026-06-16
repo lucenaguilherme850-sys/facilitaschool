@@ -104,8 +104,8 @@ export const attachProof = createServerFn({ method: "POST" })
     z.object({ code: z.string().min(4).max(32), proof_url: z.string().min(3).max(500) }).parse(d),
   )
   .handler(async ({ data }) => {
-    const supabase = publicClient();
-    const { error } = await supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
       .from("orders")
       .update({
         proof_url: data.proof_url,
