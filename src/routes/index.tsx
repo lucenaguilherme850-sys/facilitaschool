@@ -1,7 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
-import { ArrowRight, Lock, Zap, ShieldCheck } from "lucide-react";
+import { ArrowRight, Lock, Zap, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { Reveal } from "@/components/Reveal";
@@ -38,21 +38,90 @@ function Index() {
       <Header />
 
       {/* HERO */}
-      <section className="relative mx-auto max-w-6xl px-6 pt-24 pb-20 overflow-hidden">
+      <section className="relative mx-auto max-w-7xl px-6 pt-20 pb-24 overflow-hidden">
         <div className="orb h-[420px] w-[420px] -top-32 -left-24 opacity-70" />
         <div className="orb orb-blue h-[360px] w-[360px] top-10 right-0 opacity-60" style={{ animationDelay: "-6s" }} />
-        <div className="orb orb-ruby h-[260px] w-[260px] bottom-0 left-1/3 opacity-50" style={{ animationDelay: "-12s" }} />
 
-        <div className="relative max-w-3xl">
-          <div className="inline-flex items-center gap-2 text-xs uppercase tracking-[0.2em] text-gold mb-6 animate-fade-in">
-            <span className="h-px w-8 bg-gold" /> Serviços
+        <div className="relative grid lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+          {/* LEFT — copy */}
+          <div className="lg:col-span-7 flex flex-col items-start">
+            <div className="flex items-center gap-3 mb-8 animate-fade-in">
+              <span className="h-px w-8 bg-gold" />
+              <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold">Serviços</span>
+            </div>
+
+            <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-balance mb-8" style={{ animation: "var(--animate-blur-in)" }}>
+              Qual serviço <em className="not-italic italic text-gold">você precisa?</em>
+            </h1>
+
+            <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed mb-10" style={{ animation: "var(--animate-blur-in)", animationDelay: "180ms" }}>
+              Escolha abaixo e preencha um formulário rápido. Pagamento via Pix e entrega rigorosa no prazo combinado.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-14" style={{ animation: "var(--animate-fade-up)", animationDelay: "320ms" }}>
+              <Link
+                to="/"
+                hash="servicos"
+                className="group relative inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground font-medium tracking-wide px-8 py-4 shadow-xl shadow-primary/15 hover:shadow-primary/25 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+              >
+                Ver serviços
+                <ArrowRight className="h-4 w-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+              <Link to="/" hash="como-funciona" className="text-sm text-muted-foreground hover:text-foreground transition-colors sweep">
+                Como funciona →
+              </Link>
+            </div>
+
+            {/* Trust strip */}
+            <div className="flex flex-wrap items-center gap-x-8 gap-y-3 pt-8 border-t border-border/40 w-full max-w-xl" style={{ animation: "var(--animate-fade-up)", animationDelay: "460ms" }}>
+              {["Entrega no prazo", "Pagamento via Pix", "100% Sigilo"].map((t) => (
+                <div key={t} className="flex items-center gap-2">
+                  <span className="h-1.5 w-1.5 rounded-full bg-gold" />
+                  <span className="text-[11px] font-semibold uppercase tracking-wider text-muted-foreground">{t}</span>
+                </div>
+              ))}
+            </div>
           </div>
-          <h1 className="text-5xl md:text-7xl leading-[1.05]" style={{ animation: "var(--animate-blur-in)" }}>
-            Qual serviço <em className="not-italic text-gold">você precisa?</em>
-          </h1>
-          <p className="mt-6 text-lg text-muted-foreground max-w-xl" style={{ animation: "var(--animate-blur-in)", animationDelay: "220ms" }}>
-            Escolha abaixo e preencha um formulário rápido. Pagamento via Pix, entrega no prazo combinado.
-          </p>
+
+          {/* RIGHT — glass mockup */}
+          <div className="hidden lg:flex lg:col-span-5 relative" style={{ animation: "var(--animate-fade-up)", animationDelay: "260ms" }}>
+            <div className="relative w-full aspect-square flex items-center justify-center">
+              {/* back card */}
+              <div className="absolute z-10 top-4 right-4 w-4/5 h-full rounded-2xl border border-border/40 bg-primary/[0.03] rotate-[4deg]" />
+
+              {/* main glass card */}
+              <div className="relative z-20 w-4/5 p-7 rounded-2xl border border-white/50 bg-white/60 shadow-2xl rotate-[-2deg] animate-float" style={{ backdropFilter: "blur(20px) saturate(140%)" }}>
+                <div className="h-12 w-12 rounded-full mb-6 grid place-items-center bg-primary/10">
+                  <CheckCircle2 className="h-6 w-6 text-primary" />
+                </div>
+                <div className="space-y-3 mb-7">
+                  <div className="h-2 w-3/4 rounded-full bg-primary/10" />
+                  <div className="h-2 w-full rounded-full bg-primary/10" />
+                  <div className="h-2 w-1/2 rounded-full bg-primary/10" />
+                </div>
+                <div className="flex justify-between items-end">
+                  <div>
+                    <p className="text-[10px] uppercase tracking-widest font-bold text-muted-foreground/60 mb-1">Status</p>
+                    <p className="text-sm font-semibold text-primary">Execução Premium</p>
+                  </div>
+                  <p className="font-display text-3xl text-gold leading-none">99%</p>
+                </div>
+              </div>
+
+              {/* floating proof card */}
+              <div className="absolute -bottom-2 -left-4 z-30 p-4 pr-5 rounded-xl border border-white/60 bg-white/85 shadow-xl flex items-center gap-3" style={{ backdropFilter: "blur(14px)" }}>
+                <div className="flex -space-x-2">
+                  <span className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-gold to-gold-soft" />
+                  <span className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-primary to-primary/60" />
+                  <span className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-secondary to-accent" />
+                </div>
+                <div className="text-xs leading-tight">
+                  <p className="font-bold text-primary">+500 alunos</p>
+                  <p className="text-muted-foreground">atendidos com sigilo</p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
