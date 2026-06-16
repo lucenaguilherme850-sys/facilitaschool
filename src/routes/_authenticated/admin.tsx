@@ -234,6 +234,9 @@ function AdminPage() {
                     <select value={o.status} onChange={(e) => changeStatus(o.id, e.target.value)} className="bg-input border border-border rounded-lg px-3 py-1.5 text-sm">
                       {STATUSES.map(s => <option key={s} value={s}>{STATUS_LABEL[s]}</option>)}
                     </select>
+                    <button onClick={() => removeOrder(o.id, o.public_code)} title="Apagar pedido" className="ui-icon-btn hover:!border-red-500/60 hover:!text-red-400">
+                      <Trash2 className="h-4 w-4" />
+                    </button>
                     <button onClick={() => setExpanded(open ? null : o.id)} className="ui-icon-btn">
                       {open ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
                     </button>
