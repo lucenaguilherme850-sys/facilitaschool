@@ -44,12 +44,24 @@
   --animate-shimmer: shimmer 2.6s linear infinite;
   --animate-float: float 6s ease-in-out infinite;
   --animate-grid-pan: grid-pan 30s linear infinite;
+  --animate-blur-in: blur-in 1.1s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-marquee: marquee 28s linear infinite;
+  --animate-orb: orb-drift 18s ease-in-out infinite;
 }
 
 @keyframes fade-in { from { opacity: 0 } to { opacity: 1 } }
 @keyframes fade-up { from { opacity: 0; transform: translateY(18px) } to { opacity: 1; transform: translateY(0) } }
 @keyframes scale-in { from { opacity: 0; transform: scale(.96) } to { opacity: 1; transform: scale(1) } }
 @keyframes shimmer { 0% { background-position: -200% 0 } 100% { background-position: 200% 0 } }
+@keyframes blur-in {
+  from { opacity: 0; filter: blur(14px); transform: translateY(24px) scale(0.98); letter-spacing: 0.02em; }
+  to   { opacity: 1; filter: blur(0);    transform: translateY(0) scale(1);     letter-spacing: -0.02em; }
+}
+@keyframes marquee { from { transform: translateX(0) } to { transform: translateX(-50%) } }
+@keyframes orb-drift {
+  0%,100% { transform: translate(0,0) scale(1); }
+  50%     { transform: translate(40px,-30px) scale(1.08); }
+}
 @keyframes float { 0%,100% { transform: translateY(0) } 50% { transform: translateY(-8px) } }
 @keyframes grid-pan { from { background-position: 0 0 } to { background-position: 60px 60px } }
 
