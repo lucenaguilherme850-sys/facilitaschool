@@ -4,7 +4,7 @@ const WHATS_NUMBER = "5564999611088";
 const WHATS_MSG = encodeURIComponent("Olá! Preciso de suporte com a Facilit.");
 
 export function WhatsAppFab() {
-  const href = `https://web.whatsapp.com/send?phone=${WHATS_NUMBER}&text=${WHATS_MSG}`;
+  const href = `https://wa.me/${WHATS_NUMBER}?text=${WHATS_MSG}`;
 
   function openWhatsApp(event: React.MouseEvent<HTMLAnchorElement>) {
     event.preventDefault();
