@@ -16,8 +16,10 @@ const servicesQuery = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Executa — Serviços educacionais via Pix" },
-      { name: "description", content: "Atividades GoEnglish, Netescola/Ser Goiás e Revisa Goiás executadas com atenção. Pagamento via Pix, entrega no prazo." },
+      { title: "Faclit — Suas atividades feitas, sem cobrança de professor" },
+      { name: "description", content: "Cansado de professor te enchendo o saco pra entregar atividade? A Faclit resolve por você: GoEnglish, Netescola e Revisa Goiás entregues no prazo, pagamento via Pix, 100% sigilo." },
+      { property: "og:title", content: "Faclit — Suas atividades feitas, sem dor de cabeça" },
+      { property: "og:description", content: "Pare de adiar atividade escolar. A gente executa por você — entrega no prazo, Pix e sigilo total." },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
