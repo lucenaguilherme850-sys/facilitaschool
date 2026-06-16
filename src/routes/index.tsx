@@ -190,7 +190,7 @@ function Index() {
 
       <footer className="border-t border-border/40 py-10">
         <div className="mx-auto max-w-6xl px-6 text-sm text-muted-foreground flex flex-wrap justify-between gap-4">
-          <span>© {new Date().getFullYear()} Executa.</span>
+          <span>© {new Date().getFullYear()} Faclit.</span>
           <span>Atendimento: (64) 99961-1088</span>
         </div>
       </footer>
