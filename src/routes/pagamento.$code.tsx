@@ -55,13 +55,13 @@ function PaymentPage() {
     `Olá! Acabei de pagar o serviço *${order.service_name}*.\nCódigo do pedido: *${order.public_code}*\nValor: ${fmt(order.amount_cents)}\nSegue o comprovante 📎`,
   );
   const waText = decodeURIComponent(waMessage);
-  const waAppLink = `whatsapp://send?phone=${WHATSAPP}&text=${waMessage}`;
+  const waWebLink = `https://wa.me/${WHATSAPP}?text=${waMessage}`;
 
   function openWhatsApp(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
     navigator.clipboard.writeText(waText).catch(() => undefined);
     toast.success(`Mensagem copiada. Abrindo WhatsApp para ${WHATSAPP_DISPLAY}.`);
-    window.location.href = waAppLink;
+    window.open(waWebLink, "_blank", "noopener,noreferrer");
   }
 
   
@@ -127,7 +127,7 @@ function PaymentPage() {
           <h2 className="font-display text-2xl mb-1">Envie o comprovante pelo WhatsApp</h2>
           <p className="text-sm text-muted-foreground mb-6">Toque no botão abaixo — abrimos o WhatsApp com a mensagem já preenchida. Basta anexar a foto/PDF do comprovante e enviar.</p>
 
-          <a href={waAppLink} onClick={openWhatsApp} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold px-5 py-3.5 hover:brightness-110 transition">
+          <a href={waWebLink} target="_blank" rel="noopener noreferrer" onClick={openWhatsApp} className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-[#25D366] text-white font-semibold px-5 py-3.5 hover:brightness-110 transition">
             <MessageCircle className="h-5 w-5" /> Abrir WhatsApp: {WHATSAPP_DISPLAY}
           </a>
           <div className="mt-4 flex items-center gap-2 text-xs text-muted-foreground">
