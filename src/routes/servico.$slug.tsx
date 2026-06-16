@@ -160,6 +160,9 @@ function ServicePage() {
               </Field>
               <Field label="WhatsApp ou e-mail *" error={errors.contact}>
                 <input value={contact} onChange={(e) => setContact(e.target.value)} className="ui-input" placeholder="(64) 99999-9999 ou seu@email.com" maxLength={160} />
+                <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
+                  ⚠️ Obrigatório — usamos este contato para te avisar se houver qualquer problema (senha incorreta, usuário não encontrado, dúvidas sobre o pedido, etc.).
+                </p>
               </Field>
 
               {cfg.fields.map((f) => (
