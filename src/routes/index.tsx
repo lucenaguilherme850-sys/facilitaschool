@@ -53,11 +53,11 @@ function Index() {
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-balance mb-8" style={{ animation: "var(--animate-blur-in)" }}>
-              Qual serviço <em className="not-italic italic text-gold">você precisa?</em>
+              Chega de professor <em className="not-italic italic text-gold">no seu pé.</em>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed mb-10" style={{ animation: "var(--animate-blur-in)", animationDelay: "180ms" }}>
-              Escolha abaixo e preencha um formulário rápido. Pagamento via Pix e entrega rigorosa no prazo combinado.
+              A Faclit faz suas atividades de GoEnglish, Netescola e Revisa Goiás <strong className="text-foreground">no prazo</strong>, com sigilo total. Você paga via Pix e a gente entrega — simples assim.
             </p>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-14" style={{ animation: "var(--animate-fade-up)", animationDelay: "320ms" }}>
