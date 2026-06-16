@@ -3,9 +3,9 @@ import { useServerFn } from "@tanstack/react-start";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
-import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search } from "lucide-react";
+import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search, Trash2 } from "lucide-react";
 import { Background } from "@/components/Background";
-import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin } from "@/lib/orders.functions";
+import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin, adminDeleteOrder } from "@/lib/orders.functions";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
