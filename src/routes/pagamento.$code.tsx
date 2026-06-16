@@ -55,13 +55,13 @@ function PaymentPage() {
     `Olá! Acabei de pagar o serviço *${order.service_name}*.\nCódigo do pedido: *${order.public_code}*\nValor: ${fmt(order.amount_cents)}\nSegue o comprovante 📎`,
   );
   const waText = decodeURIComponent(waMessage);
-  const waAppLink = `whatsapp://send?phone=${WHATSAPP}&text=${waMessage}`;
+  const waWebLink = `https://wa.me/${WHATSAPP}?text=${waMessage}`;
 
   function openWhatsApp(e: React.MouseEvent<HTMLAnchorElement>) {
     e.preventDefault();
     navigator.clipboard.writeText(waText).catch(() => undefined);
     toast.success(`Mensagem copiada. Abrindo WhatsApp para ${WHATSAPP_DISPLAY}.`);
-    window.location.href = waAppLink;
+    window.open(waWebLink, "_blank", "noopener,noreferrer");
   }
 
   
