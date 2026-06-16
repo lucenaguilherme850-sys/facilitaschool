@@ -16,8 +16,10 @@ const servicesQuery = queryOptions({
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Executa — Serviços educacionais via Pix" },
-      { name: "description", content: "Atividades GoEnglish, Netescola/Ser Goiás e Revisa Goiás executadas com atenção. Pagamento via Pix, entrega no prazo." },
+      { title: "Faclit — Suas atividades feitas, sem cobrança de professor" },
+      { name: "description", content: "Cansado de professor te enchendo o saco pra entregar atividade? A Faclit resolve por você: GoEnglish, Netescola e Revisa Goiás entregues no prazo, pagamento via Pix, 100% sigilo." },
+      { property: "og:title", content: "Faclit — Suas atividades feitas, sem dor de cabeça" },
+      { property: "og:description", content: "Pare de adiar atividade escolar. A gente executa por você — entrega no prazo, Pix e sigilo total." },
     ],
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
@@ -51,11 +53,11 @@ function Index() {
             </div>
 
             <h1 className="text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-balance mb-8" style={{ animation: "var(--animate-blur-in)" }}>
-              Qual serviço <em className="not-italic italic text-gold">você precisa?</em>
+              Chega de professor <em className="not-italic italic text-gold">no seu pé.</em>
             </h1>
 
             <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed mb-10" style={{ animation: "var(--animate-blur-in)", animationDelay: "180ms" }}>
-              Escolha abaixo e preencha um formulário rápido. Pagamento via Pix e entrega rigorosa no prazo combinado.
+              A Faclit faz suas atividades de GoEnglish, Netescola e Revisa Goiás <strong className="text-foreground">no prazo</strong>, com sigilo total. Você paga via Pix e a gente entrega — simples assim.
             </p>
 
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 mb-14" style={{ animation: "var(--animate-fade-up)", animationDelay: "320ms" }}>
@@ -188,7 +190,7 @@ function Index() {
 
       <footer className="border-t border-border/40 py-10">
         <div className="mx-auto max-w-6xl px-6 text-sm text-muted-foreground flex flex-wrap justify-between gap-4">
-          <span>© {new Date().getFullYear()} Executa.</span>
+          <span>© {new Date().getFullYear()} Faclit.</span>
           <span>Atendimento: (64) 99961-1088</span>
         </div>
       </footer>

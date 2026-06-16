@@ -9,7 +9,7 @@ import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkI
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
-  head: () => ({ meta: [{ title: "Painel Admin — Executa" }] }),
+  head: () => ({ meta: [{ title: "Painel Admin — Faclit" }] }),
   component: AdminPage,
 });
 
@@ -167,7 +167,7 @@ function AdminPage() {
       <Background />
       <header className="sticky top-0 z-40 backdrop-blur-xl bg-background/70 border-b border-border/60">
         <div className="mx-auto max-w-7xl px-6 h-16 flex items-center justify-between">
-          <Link to="/" className="font-display text-xl">Executa<span className="text-gold">.</span><span className="text-muted-foreground text-sm ml-3">Admin</span></Link>
+          <Link to="/" className="font-display text-xl">Faclit<span className="text-gold">.</span><span className="text-muted-foreground text-sm ml-3">Admin</span></Link>
           <div className="flex items-center gap-2">
             <button onClick={() => downloadCSV(filtered)} className="inline-flex items-center gap-2 h-9 px-3 rounded-lg border border-border bg-card hover:border-gold hover:text-gold text-sm">
               <Download className="h-4 w-4" /> Exportar CSV
