@@ -56,8 +56,8 @@ const createOrderSchema = z.object({
 export const createOrder = createServerFn({ method: "POST" })
   .inputValidator((d: unknown) => createOrderSchema.parse(d))
   .handler(async ({ data }) => {
-    const supabase = publicClient();
-    const { data: svc, error: svcErr } = await supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data: svc, error: svcErr } = await supabaseAdmin
       .from("services")
       .select("*")
       .eq("slug", data.service_slug)
@@ -68,7 +68,7 @@ export const createOrder = createServerFn({ method: "POST" })
     const amount_cents = svc.price_cents * data.quantity;
     const public_code = genCode();
 
-    const { data: inserted, error } = await supabase
+    const { data: inserted, error } = await supabaseAdmin
       .from("orders")
       .insert({
         public_code,
@@ -104,8 +104,8 @@ export const attachProof = createServerFn({ method: "POST" })
     z.object({ code: z.string().min(4).max(32), proof_url: z.string().min(3).max(500) }).parse(d),
   )
   .handler(async ({ data }) => {
-    const supabase = publicClient();
-    const { error } = await supabase
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { error } = await supabaseAdmin
       .from("orders")
       .update({
         proof_url: data.proof_url,
