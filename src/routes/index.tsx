@@ -118,7 +118,7 @@ function Index() {
                   <span className="h-8 w-8 rounded-full border-2 border-white bg-gradient-to-br from-secondary to-accent" />
                 </div>
                 <div className="text-xs leading-tight">
-                  <p className="font-bold text-primary">+500 alunos</p>
+                  <p className="font-bold text-primary">+47 alunos</p>
                   <p className="text-muted-foreground">atendidos com sigilo</p>
                 </div>
               </div>
