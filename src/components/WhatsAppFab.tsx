@@ -1,7 +1,7 @@
 import { MessageCircle } from "lucide-react";
 
 const WHATS_NUMBER = "5564999611088";
-const WHATS_MSG = encodeURIComponent("Olá! Preciso de suporte com a Faclit.");
+const WHATS_MSG = encodeURIComponent("Olá! Preciso de suporte com a Facilit.");
 
 export function WhatsAppFab() {
   const href = `https://web.whatsapp.com/send?phone=${WHATS_NUMBER}&text=${WHATS_MSG}`;
