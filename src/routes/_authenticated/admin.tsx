@@ -73,12 +73,14 @@ function AdminPage() {
   const updateFn = useServerFn(adminUpdateOrderStatus);
   const signFn = useServerFn(adminGetProofSignedUrl);
   const checkFn = useServerFn(checkIsAdmin);
+  const deleteFn = useServerFn(adminDeleteOrder);
 
   const adminCheck = useQuery({ queryKey: ["isAdmin"], queryFn: () => checkFn() });
   const ordersQ = useQuery({
     queryKey: ["admin-orders"],
     queryFn: () => listFn(),
     enabled: adminCheck.data?.isAdmin === true,
+    refetchInterval: 30_000,
   });
 
   const [expanded, setExpanded] = useState<string | null>(null);
