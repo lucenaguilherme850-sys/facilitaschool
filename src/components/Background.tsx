@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 // Partículas fixas — menos elementos, sem dupla animação, sem box-shadow pesado
 const PARTICLES = [
@@ -12,6 +12,8 @@ const PARTICLES = [
 
 export function Background() {
   const [reduced, setReduced] = useState(false);
+  const spotRef = useRef<HTMLDivElement>(null);
+  const parallaxRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
@@ -20,6 +22,42 @@ export function Background() {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
+  // Cursor-reactive spotlight + parallax (passive, GPU-only, doesn't block content)
+  useEffect(() => {
+    if (reduced) return;
+    let raf = 0;
+    let tx = window.innerWidth / 2;
+    let ty = window.innerHeight / 2;
+    let cx = tx;
+    let cy = ty;
+
+    const onMove = (e: PointerEvent) => {
+      tx = e.clientX;
+      ty = e.clientY;
+    };
+
+    const tick = () => {
+      cx += (tx - cx) * 0.08;
+      cy += (ty - cy) * 0.08;
+      if (spotRef.current) {
+        spotRef.current.style.transform = `translate3d(${cx - 300}px, ${cy - 300}px, 0)`;
+      }
+      if (parallaxRef.current) {
+        const dx = (cx / window.innerWidth - 0.5) * 30;
+        const dy = (cy / window.innerHeight - 0.5) * 30;
+        parallaxRef.current.style.transform = `translate3d(${dx}px, ${dy}px, 0)`;
+      }
+      raf = requestAnimationFrame(tick);
+    };
+
+    window.addEventListener("pointermove", onMove, { passive: true });
+    raf = requestAnimationFrame(tick);
+    return () => {
+      window.removeEventListener("pointermove", onMove);
+      cancelAnimationFrame(raf);
+    };
+  }, [reduced]);
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
@@ -36,22 +74,36 @@ export function Background() {
         }}
       />
 
-      {/* BLOBS — só 2, animação mais lenta */}
-      <div
-        className="absolute -top-40 -left-32 h-[640px] w-[640px] rounded-full blur-3xl will-change-transform"
-        style={{
-          background: "radial-gradient(closest-side, oklch(0.38 0.10 162 / 0.75), transparent 70%)",
-          animation: reduced ? undefined : "orb-drift 22s ease-in-out infinite",
-        }}
-      />
-      <div
-        className="absolute top-1/4 -right-40 h-[560px] w-[560px] rounded-full blur-3xl will-change-transform"
-        style={{
-          background: "radial-gradient(closest-side, oklch(0.74 0.14 80 / 0.65), transparent 70%)",
-          animation: reduced ? undefined : "orb-drift 28s ease-in-out infinite",
-          animationDelay: "-9s",
-        }}
-      />
+      {/* Camada de parallax — segue o cursor sutilmente */}
+      <div ref={parallaxRef} className="absolute inset-0 will-change-transform">
+        <div
+          className="absolute -top-40 -left-32 h-[640px] w-[640px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(closest-side, oklch(0.38 0.10 162 / 0.75), transparent 70%)",
+            animation: reduced ? undefined : "orb-drift 22s ease-in-out infinite",
+          }}
+        />
+        <div
+          className="absolute top-1/4 -right-40 h-[560px] w-[560px] rounded-full blur-3xl"
+          style={{
+            background: "radial-gradient(closest-side, oklch(0.74 0.14 80 / 0.65), transparent 70%)",
+            animation: reduced ? undefined : "orb-drift 28s ease-in-out infinite",
+            animationDelay: "-9s",
+          }}
+        />
+      </div>
+
+      {/* SPOTLIGHT — luz dourada seguindo o cursor */}
+      {!reduced && (
+        <div
+          ref={spotRef}
+          className="absolute top-0 left-0 h-[600px] w-[600px] rounded-full blur-3xl will-change-transform"
+          style={{
+            background:
+              "radial-gradient(closest-side, oklch(0.85 0.14 85 / 0.35), transparent 70%)",
+          }}
+        />
+      )}
 
       {/* GRID estático — sem animação (economia enorme de paint) */}
       <div className="absolute inset-0 bg-grid opacity-40" />
