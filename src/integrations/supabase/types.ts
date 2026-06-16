@@ -141,6 +141,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      cleanup_old_orders: { Args: never; Returns: undefined }
       get_order_by_code: {
         Args: { _code: string }
         Returns: {
