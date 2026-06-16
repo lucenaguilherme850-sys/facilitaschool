@@ -35,6 +35,8 @@
   --color-ring: var(--ring);
   --color-gold: var(--gold);
   --color-gold-soft: var(--gold-soft);
+  --color-ruby: var(--ruby);
+  --color-ruby-soft: var(--ruby-soft);
 
   --animate-fade-in: fade-in 0.6s ease-out both;
   --animate-fade-up: fade-up 0.7s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -68,13 +70,15 @@
   --muted-foreground: oklch(0.48 0.02 260);
   --accent: oklch(0.94 0.04 85);            /* dourado suave */
   --accent-foreground: oklch(0.22 0.05 260);
-  --destructive: oklch(0.58 0.22 25);
+  --destructive: oklch(0.55 0.23 25);
   --destructive-foreground: oklch(0.99 0.005 95);
   --border: oklch(0.88 0.012 250);
   --input: oklch(0.97 0.008 250);
   --ring: oklch(0.42 0.16 258);
   --gold: oklch(0.74 0.14 78);              /* dourado vivo — atenção */
   --gold-soft: oklch(0.88 0.10 82);
+  --ruby: oklch(0.55 0.23 25);              /* vermelho rubi — urgência/destaque */
+  --ruby-soft: oklch(0.92 0.06 22);
 }
 
 .dark {
@@ -109,5 +113,10 @@
   .shadow-gold { box-shadow: 0 10px 40px -10px oklch(0.74 0.14 78 / 0.45); }
   .shadow-card { box-shadow: 0 1px 0 0 oklch(1 0 0 / 0.6) inset, 0 20px 50px -20px oklch(0.42 0.16 258 / 0.18); }
   .glow-gold { box-shadow: 0 0 0 1px oklch(0.74 0.14 78 / 0.5), 0 0 40px -5px oklch(0.74 0.14 78 / 0.35); }
+  .text-ruby { color: var(--ruby); }
+  .bg-ruby { background-color: var(--ruby); }
+  .border-ruby { border-color: var(--ruby); }
+  .bg-ruby-gradient { background-image: linear-gradient(135deg, var(--ruby) 0%, oklch(0.62 0.24 18) 100%); }
+  .shadow-ruby { box-shadow: 0 10px 40px -10px oklch(0.55 0.23 25 / 0.45); }
 }
 
