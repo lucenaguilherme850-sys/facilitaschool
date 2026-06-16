@@ -7,7 +7,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { lovable } from "@/integrations/lovable";
 
 export const Route = createFileRoute("/auth")({
-  head: () => ({ meta: [{ title: "Acesso Admin — Executa" }] }),
+  head: () => ({ meta: [{ title: "Acesso Admin — Faclit" }] }),
   component: AuthPage,
 });
 
