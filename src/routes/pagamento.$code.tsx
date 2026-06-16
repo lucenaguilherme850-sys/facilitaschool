@@ -76,16 +76,16 @@ function PaymentPage() {
     <>
       <Background />
       <Header />
-      <div className="mx-auto max-w-3xl px-6 pt-10">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 pt-8 sm:pt-10">
         <Link to="/" className="text-sm text-muted-foreground hover:text-foreground">← Início</Link>
       </div>
 
-      <div className="mx-auto max-w-3xl px-6 py-10 space-y-6">
+      <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 space-y-5 sm:space-y-6">
         {/* CONFIRM */}
-        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-8 animate-fade-up">
+        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-8 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Pedido criado</div>
-          <h1 className="font-display text-4xl mb-2">Pague via Pix para começar</h1>
-          <p className="text-muted-foreground mb-8">Use os dados abaixo. Depois, envie o comprovante.</p>
+          <h1 className="font-display text-3xl sm:text-4xl mb-2">Pague via Pix para começar</h1>
+          <p className="text-muted-foreground mb-6 sm:mb-8">Use os dados abaixo. Depois, envie o comprovante.</p>
 
           {/* Code */}
           <div className="rounded-xl border border-gold/40 bg-gold/5 p-5 mb-6">

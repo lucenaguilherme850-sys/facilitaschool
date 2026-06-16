@@ -137,19 +137,19 @@ function ServicePage() {
     <>
       <Background />
       <Header />
-      <div className="mx-auto max-w-6xl px-6 pt-10">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 pt-8 sm:pt-10">
         <div className="text-sm text-muted-foreground">
           <Link to="/" className="hover:text-foreground">Início</Link> / <span className="text-foreground">{svc.name}</span>
         </div>
         <p className="mt-2 text-muted-foreground">{svc.description}</p>
       </div>
 
-      <div className="mx-auto max-w-6xl px-6 py-10 grid lg:grid-cols-[1fr_360px] gap-6 items-start">
+      <div className="mx-auto max-w-6xl px-4 sm:px-6 py-8 sm:py-10 grid lg:grid-cols-[1fr_360px] gap-5 sm:gap-6 items-start">
         {/* FORM */}
-        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-8 animate-fade-up">
+        <div className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-8 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Etapa {step} de 2</div>
-          <h1 className="font-display text-3xl mb-1">{step === 1 ? svc.name : "Revise seu pedido"}</h1>
-          <p className="text-sm text-muted-foreground mb-8">
+          <h1 className="font-display text-2xl sm:text-3xl mb-1">{step === 1 ? svc.name : "Revise seu pedido"}</h1>
+          <p className="text-sm text-muted-foreground mb-6 sm:mb-8">
             {step === 1 ? svc.description : "Confirme os dados antes de ir para o pagamento."}
           </p>
 
@@ -220,7 +220,7 @@ function ServicePage() {
         </div>
 
         {/* SUMMARY */}
-        <aside className="rounded-2xl bg-card shadow-card border border-border/60 p-6 lg:sticky lg:top-24 animate-fade-up">
+        <aside className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-6 lg:sticky lg:top-24 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Resumo</div>
           <h3 className="font-display text-xl mb-5">{svc.name}</h3>
           <div className="space-y-3 text-sm">
