@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { useHydrated } from "@tanstack/react-router";
 
 // Partículas fixas — menos elementos, sem dupla animação, sem box-shadow pesado
 const PARTICLES = [
@@ -11,6 +12,7 @@ const PARTICLES = [
 ];
 
 export function Background() {
+  const hydrated = useHydrated();
   const [reduced, setReduced] = useState(false);
   const spotRef = useRef<HTMLDivElement>(null);
   const parallaxRef = useRef<HTMLDivElement>(null);
@@ -22,6 +24,7 @@ export function Background() {
     mq.addEventListener("change", update);
     return () => mq.removeEventListener("change", update);
   }, []);
+
 
   // Cursor-reactive spotlight + parallax (passive, GPU-only, doesn't block content)
   useEffect(() => {
@@ -58,6 +61,12 @@ export function Background() {
       cancelAnimationFrame(raf);
     };
   }, [reduced]);
+
+  // Skip on SSR + first hydration paint: defers ~6 absolute layers + RAF setup
+  // off the critical path and avoids any motion-related hydration mismatch.
+  if (!hydrated) {
+    return <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 bg-background" />;
+  }
 
   return (
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
