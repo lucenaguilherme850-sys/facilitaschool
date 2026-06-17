@@ -1,36 +1,24 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
- * Cinematic scroll intro inspired by oryzo.ai:
- * - Fixed overlay covers the viewport on first load
- * - As the user scrolls, the brand name zooms IN slightly,
- *   brightens, sharpens, then the whole overlay fades + scales out
- *   revealing the page underneath.
- * - Uses a tall spacer to drive scroll progress, then unmounts.
+ * Cinematic scroll intro inspired by oryzo.ai.
+ * The overlay is fixed above the real page, so the first frame always shows
+ * the brand name instead of an empty spacer/blank screen.
  */
 export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const [progress, setProgress] = useState(0);
-  const [done, setDone] = useState(false);
-  const spacerRef = useRef<HTMLDivElement>(null);
+  const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
-    if (mq.matches) {
-      setDone(true);
-      return;
-    }
-    // lock scroll restoration to top on mount
+    // Start the cinematic opening at the top, even when the browser restores scroll.
     window.scrollTo(0, 0);
 
     let raf = 0;
     const update = () => {
-      const el = spacerRef.current;
-      if (!el) return;
-      const total = el.offsetHeight - window.innerHeight;
-      const scrolled = Math.min(Math.max(window.scrollY, 0), total);
-      const p = total > 0 ? scrolled / total : 1;
+      const total = Math.max(window.innerHeight * 0.9, 1);
+      const p = Math.min(Math.max(window.scrollY / total, 0), 1);
       setProgress(p);
-      if (p >= 1) setDone(true);
+      setHidden(p >= 0.995);
     };
     const onScroll = () => {
       if (raf) return;
@@ -49,93 +37,86 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
     };
   }, []);
 
-  if (done) return null;
+  if (hidden) return null;
 
-  // Easing
-  const ease = (t: number) => 1 - Math.pow(1 - t, 3);
-  const p = ease(progress);
+  const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
+  const smoothstep = (edge0: number, edge1: number, value: number) => {
+    const t = clamp01((value - edge0) / (edge1 - edge0));
+    return t * t * (3 - 2 * t);
+  };
 
-  // Name is fully visible at rest; scroll zooms it slightly and blurs it out.
-  const scale = 1 + p * 0.25;
-  const blur = p * 12;
-  const tracking = -0.02 + p * 0.08; // em
-  const textOpacity = 1 - p;
+  const exit = smoothstep(0.08, 0.92, progress);
+  const overlayExit = smoothstep(0.52, 1, progress);
+  const scale = 1 + exit * 0.42;
+  const blur = exit * 14;
+  const tracking = 0.01 + exit * 0.1;
+  const textOpacity = 1 - smoothstep(0.2, 0.82, progress);
 
-  // Last 40% of the timeline: overlay fades out, revealing page.
-  const exitT = Math.max(0, (progress - 0.6) / 0.4);
-  const overlayOpacity = 1 - exitT;
-  const overlayScale = 1 + exitT * 0.06;
+  const overlayOpacity = 1 - overlayExit;
+  const overlayScale = 1 + overlayExit * 0.05;
 
   return (
-    <>
-      {/* Spacer drives scroll progress without affecting layout */}
-      <div ref={spacerRef} aria-hidden style={{ height: "200vh" }} />
-
-      {/* Fixed cinematic overlay */}
+    <div
+      aria-hidden
+      className="fixed inset-0 z-[9999] flex min-h-dvh items-center justify-center overflow-hidden"
+      style={{
+        opacity: overlayOpacity,
+        transform: `scale(${overlayScale})`,
+        pointerEvents: overlayOpacity > 0.04 ? "auto" : "none",
+        background: "var(--background)",
+        willChange: "opacity, transform",
+      }}
+    >
       <div
-        aria-hidden
-        className="fixed inset-0 z-[60] flex items-center justify-center overflow-hidden"
+        className="absolute -left-[18%] top-1/2 h-[110vmin] w-[110vmin] -translate-y-1/2 rounded-full"
         style={{
-          opacity: overlayOpacity,
-          transform: `scale(${overlayScale})`,
-          pointerEvents: "none",
-          background: "var(--background)",
-          willChange: "opacity, transform",
+          background:
+            "radial-gradient(closest-side, color-mix(in oklch, var(--gold) 70%, transparent), transparent 70%)",
+          filter: "blur(46px)",
+          opacity: 0.72,
+        }}
+      />
+      <div
+        className="absolute -right-[14%] top-1/2 h-[86vmin] w-[86vmin] -translate-y-1/2 rounded-full"
+        style={{
+          background:
+            "radial-gradient(closest-side, color-mix(in oklch, var(--primary) 58%, transparent), transparent 70%)",
+          filter: "blur(54px)",
+          opacity: 0.62,
+        }}
+      />
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 30%, oklch(0 0 0 / 0.72) 100%)",
+        }}
+      />
+
+      <h1
+        className="relative max-w-[94vw] select-none whitespace-nowrap text-center font-display font-black uppercase will-change-transform"
+        style={{
+          transform: `scale(${scale})`,
+          filter: `blur(${blur}px)`,
+          letterSpacing: `${tracking}em`,
+          opacity: textOpacity,
+          color: "var(--gold)",
+          fontSize: "clamp(3rem, 13vw, 11rem)",
+          lineHeight: 1,
+          textShadow:
+            "0 0 34px color-mix(in oklch, var(--gold) 60%, transparent), 0 0 110px color-mix(in oklch, var(--primary) 38%, transparent)",
         }}
       >
-        {/* warm corner glow (oryzo-style) */}
-        <div
-          className="absolute -left-[20%] top-1/2 h-[120vmin] w-[120vmin] -translate-y-1/2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(closest-side, oklch(0.62 0.16 55 / 0.55), transparent 70%)",
-            filter: "blur(40px)",
-          }}
-        />
-        {/* cool counter-glow */}
-        <div
-          className="absolute -right-[15%] top-1/2 h-[90vmin] w-[90vmin] -translate-y-1/2 rounded-full"
-          style={{
-            background:
-              "radial-gradient(closest-side, oklch(0.38 0.10 162 / 0.45), transparent 70%)",
-            filter: "blur(50px)",
-          }}
-        />
-        {/* vignette */}
-        <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(ellipse at center, transparent 35%, oklch(0 0 0 / 0.7) 100%)",
-          }}
-        />
+        {name}
+      </h1>
 
-        <h1
-          className="relative select-none font-display font-black uppercase will-change-transform max-w-[92vw] text-center whitespace-nowrap"
-          style={{
-            transform: `scale(${scale})`,
-            filter: `blur(${blur}px)`,
-            letterSpacing: `${tracking}em`,
-            opacity: textOpacity,
-            color: "oklch(0.78 0.08 75)",
-            fontSize: "clamp(2.5rem, 11vw, 9rem)",
-            lineHeight: 1,
-            textShadow:
-              "0 0 60px oklch(0.74 0.14 80 / 0.4), 0 0 120px oklch(0.62 0.16 55 / 0.3)",
-          }}
-        >
-          {name}
-        </h1>
-
-        {/* scroll hint */}
-        <div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-muted-foreground animate-pulse"
-          style={{ opacity: (1 - p) * 0.8 }}
-        >
-          Role para entrar ↓
-        </div>
+      <div
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse text-center text-[10px] font-semibold uppercase text-muted-foreground"
+        style={{ letterSpacing: "0.38em", opacity: (1 - exit) * 0.82 }}
+      >
+        Role para entrar ↓
       </div>
-    </>
+    </div>
   );
 }
 
