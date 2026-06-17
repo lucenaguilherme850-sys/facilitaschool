@@ -186,22 +186,31 @@ export function HeroSection() {
         </div>
       </motion.div>
 
-      {/* Trust strip */}
+      {/* Trust marquee — scrolling, edge-fade */}
       <motion.div
-        className="mt-8 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 py-6 border-y border-border opacity-70"
+        className="relative mt-8 md:mt-10 py-6 border-y border-border overflow-hidden"
         initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 0.7, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.8, ease }}
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+        }}
       >
-        {["Entrega no prazo", "Pagamento via Pix", "100% Sigilo"].map((label) => (
-          <div key={label} className="flex items-center justify-center gap-3">
-            <span className="h-1 w-1 rounded-full bg-gold shrink-0" />
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
-              {label}
-            </span>
-          </div>
-        ))}
+        <div className="flex gap-12 whitespace-nowrap will-change-transform animate-[marquee_28s_linear_infinite]">
+          {[...TRUST_ITEMS, ...TRUST_ITEMS, ...TRUST_ITEMS, ...TRUST_ITEMS].map((label, i) => (
+            <div key={`${label}-${i}`} className="flex items-center gap-3 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
       </motion.div>
+
     </section>
   );
 }
