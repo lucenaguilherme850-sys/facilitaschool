@@ -67,9 +67,7 @@ const SERVICE_FORMS: Record<string, { fields: ServiceField[]; quantityField?: st
   },
 };
 
-function fmt(cents: number) {
-  return `R$ ${(cents / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
-}
+const fmt = formatBRL;
 
 function ServicePage() {
   const { slug } = Route.useParams();
