@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search, Trash2 } from "lucide-react";
 import { Background } from "@/components/Background";
 import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin, adminDeleteOrder } from "@/lib/orders.functions";
+import { ZapierSettings } from "@/components/admin/ZapierSettings";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
@@ -182,7 +183,9 @@ function AdminPage() {
       </header>
 
       <div className="mx-auto max-w-7xl px-4 sm:px-6 py-6 sm:py-8">
+        <ZapierSettings />
         {/* Stats */}
+
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-3 mb-6">
           <StatCard label="Total" value={stats.total} />
           <StatCard label="A pagar" value={stats.pending_payment} accent="yellow" />
