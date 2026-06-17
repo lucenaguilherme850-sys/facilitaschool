@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import { useRef, type MouseEvent } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+const TRUST_ITEMS = ["Entrega no prazo", "Pagamento via Pix", "100% Sigilo", "Sem cadastro", "Suporte humano", "Resposta em minutos"];
 
 const container: Variants = {
   hidden: {},
