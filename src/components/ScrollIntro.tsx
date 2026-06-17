@@ -70,9 +70,9 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const exit = smoothstep(0.08, 0.92, progress);
   const overlayExit = smoothstep(0.52, 1, progress);
   const scale = 1 + exit * 0.36;
-  const blur = exit * 10;
+  const blur = exit * 6;
   const tracking = 0.01 + exit * 0.08;
-  const textOpacity = 1 - smoothstep(0.2, 0.82, progress);
+  const textOpacity = 1 - overlayExit;
 
   const overlayOpacity = 1 - overlayExit;
   const overlayScale = 1 + overlayExit * 0.05;
