@@ -52,20 +52,32 @@ export function Background() {
     <div aria-hidden className="pointer-events-none fixed inset-0 -z-10 overflow-hidden">
       <div className="absolute inset-0 bg-background" />
 
-      {/* Static gold glow top-right */}
+      {/* Drifting gold glow top-right */}
       <div
-        className="absolute -top-40 -right-40 h-[720px] w-[720px] rounded-full blur-3xl opacity-40"
+        className="absolute -top-40 -right-40 h-[720px] w-[720px] rounded-full blur-3xl opacity-40 will-change-transform"
         style={{
           background:
             "radial-gradient(closest-side, oklch(0.78 0.12 82 / 0.45), transparent 70%)",
+          animation: reduced ? undefined : "orb-drift 22s ease-in-out infinite",
         }}
       />
-      {/* Static soft gold glow bottom-left */}
+      {/* Drifting soft gold glow bottom-left (counter-phase) */}
       <div
-        className="absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full blur-3xl opacity-30"
+        className="absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full blur-3xl opacity-30 will-change-transform"
         style={{
           background:
             "radial-gradient(closest-side, oklch(0.87 0.10 88 / 0.30), transparent 70%)",
+          animation: reduced ? undefined : "orb-drift 28s ease-in-out infinite reverse",
+          animationDelay: "-6s",
+        }}
+      />
+      {/* Slow-pulsing accent orb center */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[420px] rounded-full blur-3xl"
+        style={{
+          background:
+            "radial-gradient(closest-side, oklch(0.78 0.12 82 / 0.10), transparent 70%)",
+          animation: reduced ? undefined : "pulse-soft 9s ease-in-out infinite",
         }}
       />
 
@@ -81,8 +93,11 @@ export function Background() {
         />
       )}
 
-      {/* Subtle grid */}
-      <div className="absolute inset-0 bg-grid opacity-30" />
+      {/* Subtle panning grid */}
+      <div
+        className="absolute inset-0 bg-grid opacity-30"
+        style={{ animation: reduced ? undefined : "grid-pan 30s linear infinite" }}
+      />
 
       {/* Vignette */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/40 via-transparent to-background/80" />
