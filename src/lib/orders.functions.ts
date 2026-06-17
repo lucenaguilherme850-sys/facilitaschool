@@ -221,13 +221,28 @@ export const adminUpdateOrderStatus = createServerFn({ method: "POST" })
       if (error) throw new Error(error.message);
       return { ok: true, deleted: true };
     }
-    const { error } = await context.supabase
+    const { data: updated, error } = await context.supabase
       .from("orders")
-      .update({ status: data.status })
-      .eq("id", data.id);
+      .update({ status: data.status, ...(data.status === "awaiting_review" ? { proof_uploaded_at: new Date().toISOString() } : {}) })
+      .eq("id", data.id)
+      .select("public_code, service_name, customer_name, customer_contact, amount_cents, proof_url")
+      .single();
     if (error) throw new Error(error.message);
+
+    if (data.status === "awaiting_review" && updated) {
+      await fireZap("proof.uploaded", {
+        public_code: updated.public_code,
+        service_name: updated.service_name,
+        customer_name: updated.customer_name,
+        customer_contact: updated.customer_contact,
+        amount_cents: updated.amount_cents,
+        amount_brl: (updated.amount_cents / 100).toFixed(2),
+        proof_url: updated.proof_url,
+      });
+    }
     return { ok: true, deleted: false };
   });
+
 
 export const adminDeleteOrder = createServerFn({ method: "POST" })
   .middleware([requireSupabaseAuth])
