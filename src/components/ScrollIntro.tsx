@@ -55,21 +55,21 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const ease = (t: number) => 1 - Math.pow(1 - t, 3);
   const p = ease(progress);
 
-  // Text starts small + blurred, grows to a controlled max while staying inside the viewport
-  const scale = 0.85 + p * 0.35;
-  const blur = (1 - p) * 10;
-  const tracking = -0.02 + (1 - p) * 0.12; // em
-  const textOpacity = 0.3 + p * 0.7;
+  // Name is fully visible at rest; scroll zooms it slightly and blurs it out.
+  const scale = 1 + p * 0.25;
+  const blur = p * 12;
+  const tracking = -0.02 + p * 0.08; // em
+  const textOpacity = 1 - p;
 
-  // Last 25% of the timeline: the entire overlay fades + scales out
-  const exitT = Math.max(0, (progress - 0.75) / 0.25);
+  // Last 40% of the timeline: overlay fades out, revealing page.
+  const exitT = Math.max(0, (progress - 0.6) / 0.4);
   const overlayOpacity = 1 - exitT;
-  const overlayScale = 1 + exitT * 0.08;
+  const overlayScale = 1 + exitT * 0.06;
 
   return (
     <>
       {/* Spacer drives scroll progress without affecting layout */}
-      <div ref={spacerRef} aria-hidden style={{ height: "260vh" }} />
+      <div ref={spacerRef} aria-hidden style={{ height: "200vh" }} />
 
       {/* Fixed cinematic overlay */}
       <div
@@ -129,7 +129,7 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
 
         {/* scroll hint */}
         <div
-          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-muted-foreground"
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-muted-foreground animate-pulse"
           style={{ opacity: (1 - p) * 0.8 }}
         >
           Role para entrar ↓
@@ -138,3 +138,4 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
     </>
   );
 }
+
