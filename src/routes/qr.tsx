@@ -102,10 +102,10 @@ function QrPage() {
 
       <div className="mx-auto max-w-xl px-6 py-10">
         <div className="qr-card rounded-2xl bg-card border border-border/60 shadow-card p-8 text-center">
-          <div className="text-xs uppercase tracking-[0.3em] text-gold mb-2">Facilit</div>
-          <h1 className="font-display text-3xl mb-3">Bora facilitar sua vida escolar? 🚀</h1>
-          <p className="text-sm text-muted-foreground mb-6">
-            NetEscola, So-Vem-Enem, GoEnglish e IFA, SEM B.O. Aponta a câmera, escaneia e descobre como a gente te ajuda a tirar nota alta sobrando tempo pra Netflix. 🎬✨
+          <div className="text-xs uppercase tracking-[0.4em] text-gold font-bold mb-3">✦ Facilit ✦</div>
+          <h1 className="font-display text-4xl md:text-5xl mb-4 bg-gradient-to-r from-gold via-gold-soft to-gold bg-clip-text text-transparent leading-tight">Bora facilitar sua vida escolar? 🚀</h1>
+          <p className="font-display text-lg md:text-xl text-foreground/90 mb-6 italic leading-snug">
+            NetEscola, So-Vem-Enem, GoEnglish e IFA, <span className="text-gold font-bold not-italic">SEM B.O.</span> Aponta a câmera, escaneia e descobre como a gente te ajuda a tirar <span className="text-gold-soft font-semibold">nota alta</span> sobrando tempo pra Netflix. 🎬✨
           </p>
           <img
             src={QR_SRC}
