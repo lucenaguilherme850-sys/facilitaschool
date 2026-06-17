@@ -17,7 +17,7 @@ const ITEMS = [
   {
     icon: CalendarClock,
     title: "2. Prazo",
-    desc: "Eu analiso sua tarefa e a demanda do momento e te passo o prazo real de entrega. Só fecho se conseguir cumprir.",
+    desc: "Eu analiso sua tarefa e a demanda do momento e te passo o prazo real de entrega. Pedidos de maior valor entram na frente da fila. Só fecho se conseguir cumprir.",
   },
   {
     icon: CheckCheck,
