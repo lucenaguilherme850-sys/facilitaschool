@@ -1,5 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { Printer, Download } from "lucide-react";
+import { jsPDF } from "jspdf";
 
 const SITE_URL = "https://facilitaschool.lovable.app";
 const QR_SRC = `https://api.qrserver.com/v1/create-qr-code/?size=1000x1000&margin=20&data=${encodeURIComponent(SITE_URL)}`;
@@ -16,6 +17,66 @@ export const Route = createFileRoute("/qr")({
   notFoundComponent: () => <div className="p-10 text-center">Página não encontrada.</div>,
 });
 
+async function loadQrDataUrl(): Promise<string> {
+  const res = await fetch(QR_SRC);
+  const blob = await res.blob();
+  return await new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onloadend = () => resolve(reader.result as string);
+    reader.onerror = reject;
+    reader.readAsDataURL(blob);
+  });
+}
+
+async function handleDownloadPdf() {
+  const qrDataUrl = await loadQrDataUrl();
+  const doc = new jsPDF({ unit: "mm", format: "a4" });
+  const pageW = doc.internal.pageSize.getWidth();
+
+  // Background card
+  doc.setFillColor(20, 20, 24);
+  doc.rect(0, 0, pageW, doc.internal.pageSize.getHeight(), "F");
+
+  // Eyebrow
+  doc.setTextColor(212, 175, 55);
+  doc.setFont("helvetica", "bold");
+  doc.setFontSize(10);
+  doc.text("FACILIT", pageW / 2, 30, { align: "center" });
+
+  // Title
+  doc.setTextColor(245, 245, 245);
+  doc.setFont("times", "bold");
+  doc.setFontSize(22);
+  doc.text("Bora facilitar sua vida escolar?", pageW / 2, 45, { align: "center" });
+
+  // Description
+  doc.setFont("helvetica", "normal");
+  doc.setFontSize(11);
+  doc.setTextColor(200, 200, 200);
+  const desc = "NetEscola, So-Vem-Enem, GoEnglish e IFA, SEM B.O. Aponta a câmera, escaneia e descobre como a gente te ajuda a tirar nota alta sobrando tempo pra Netflix.";
+  const lines = doc.splitTextToSize(desc, pageW - 50);
+  doc.text(lines, pageW / 2, 58, { align: "center" });
+
+  // QR with white background
+  const qrSize = 110;
+  const qrX = (pageW - qrSize) / 2;
+  const qrY = 80;
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(qrX - 5, qrY - 5, qrSize + 10, qrSize + 10, 4, 4, "F");
+  doc.addImage(qrDataUrl, "PNG", qrX, qrY, qrSize, qrSize);
+
+  // Footer
+  doc.setTextColor(180, 180, 180);
+  doc.setFontSize(10);
+  doc.text("Não conseguiu escanear? Digita no navegador:", pageW / 2, qrY + qrSize + 18, { align: "center" });
+  doc.setFont("courier", "bold");
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(12);
+  doc.text(SITE_URL, pageW / 2, qrY + qrSize + 26, { align: "center" });
+
+  doc.save("facilit-qr.pdf");
+}
+
 function QrPage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -30,9 +91,9 @@ function QrPage() {
       <div className="no-print mx-auto max-w-3xl px-6 pt-8 flex items-center justify-between">
         <a href="/" className="text-sm text-muted-foreground hover:text-foreground">← Início</a>
         <div className="flex gap-2">
-          <a href={QR_SRC} download="facilit-qr.png" className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
-            <Download className="h-4 w-4" /> Baixar PNG
-          </a>
+          <button onClick={handleDownloadPdf} className="inline-flex items-center gap-2 rounded-full border border-border px-4 py-2 text-sm hover:bg-secondary">
+            <Download className="h-4 w-4" /> Baixar PDF
+          </button>
           <button onClick={() => window.print()} className="inline-flex items-center gap-2 rounded-full bg-primary text-primary-foreground px-4 py-2 text-sm">
             <Printer className="h-4 w-4" /> Imprimir
           </button>
