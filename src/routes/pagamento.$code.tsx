@@ -1,7 +1,7 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { Copy, Check, MessageCircle, ShieldCheck } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Copy, Check, MessageCircle, ShieldCheck, Clock, Loader2, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
@@ -16,7 +16,22 @@ const orderQuery = (code: string) =>
   queryOptions({
     queryKey: ["order", code],
     queryFn: () => getOrderByCode({ data: { code } }),
+    refetchInterval: 8000,
+    refetchIntervalInBackground: true,
   });
+
+const STATUS_META: Record<string, { label: string; tone: string; icon: typeof Clock; message: string }> = {
+  pending_payment: { label: "Aguardando pagamento", tone: "text-gold border-gold/40 bg-gold/5", icon: Clock, message: "Pague via Pix para iniciarmos seu pedido." },
+  payment_received: { label: "Pagamento recebido", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: CheckCircle2, message: "Recebemos seu Pix! Em breve começamos." },
+  paid: { label: "Pagamento confirmado", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: CheckCircle2, message: "Pagamento confirmado. Vamos começar!" },
+  in_progress: { label: "Em andamento", tone: "text-sky-400 border-sky-400/40 bg-sky-400/5", icon: Loader2, message: "Nossa equipe já está fazendo sua atividade." },
+  delivered: { label: "Entregue", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: Sparkles, message: "Tudo pronto! Sua atividade foi entregue." },
+  cancelled: { label: "Cancelado", tone: "text-red-400 border-red-400/40 bg-red-400/5", icon: Clock, message: "Este pedido foi cancelado." },
+};
+
+function getStatusMeta(status: string) {
+  return STATUS_META[status] ?? { label: status, tone: "text-muted-foreground border-border bg-card", icon: Clock, message: "Status atualizado." };
+}
 
 function PaymentError({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
@@ -42,6 +57,26 @@ function PaymentPage() {
   const { code } = Route.useParams();
   const { data: order } = useSuspenseQuery(orderQuery(code));
   const [copied, setCopied] = useState<string | null>(null);
+
+  const prevStatusRef = useRef<string | null>(order?.status ?? null);
+  useEffect(() => {
+    if (!order?.status) return;
+    const prev = prevStatusRef.current;
+    if (prev && prev !== order.status) {
+      const meta = getStatusMeta(order.status);
+      toast.success(meta.label, { description: meta.message, duration: 7000 });
+      if ("Notification" in window && Notification.permission === "granted") {
+        try { new Notification(`Pedido ${order.public_code}`, { body: `${meta.label} — ${meta.message}` }); } catch {}
+      }
+    }
+    prevStatusRef.current = order.status;
+  }, [order?.status, order?.public_code]);
+
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(() => undefined);
+    }
+  }, []);
 
   if (!order) {
     return (
@@ -93,6 +128,28 @@ function PaymentPage() {
       </div>
 
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 space-y-5 sm:space-y-6">
+        {/* STATUS BANNER — atualiza sozinho a cada poucos segundos */}
+        {(() => {
+          const meta = getStatusMeta(order.status);
+          const Icon = meta.icon;
+          const animate = order.status === "in_progress";
+          return (
+            <div className={`rounded-2xl border p-4 sm:p-5 flex items-center gap-4 animate-fade-up ${meta.tone}`}>
+              <div className="h-11 w-11 rounded-full bg-card border border-current/30 flex items-center justify-center shrink-0">
+                <Icon className={`h-5 w-5 ${animate ? "animate-spin" : ""}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] uppercase tracking-[0.25em] opacity-80 font-semibold">Status do pedido</div>
+                <div className="font-display text-lg sm:text-xl text-foreground">{meta.label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{meta.message}</div>
+              </div>
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" /> Ao vivo
+              </span>
+            </div>
+          );
+        })()}
+
         {/* CONFIRM */}
         <div className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-8 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Pedido criado</div>
