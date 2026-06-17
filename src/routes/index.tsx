@@ -52,6 +52,7 @@ function Index() {
   return (
     <>
       <Background />
+      <ScrollIntro name="FACILIT" />
       <Header />
 
       {/* HERO */}
