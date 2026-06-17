@@ -10,11 +10,21 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const [hidden, setHidden] = useState(false);
 
   useEffect(() => {
-    // Start the cinematic opening at the top, even when the browser restores scroll.
-    window.scrollTo(0, 0);
-
+    const html = document.documentElement;
+    const previousScrollBehavior = html.style.scrollBehavior;
+    const previousRestoration = window.history.scrollRestoration;
     let raf = 0;
+    let armRaf = 0;
+    let armed = false;
+
+    html.style.scrollBehavior = "auto";
+    window.history.scrollRestoration = "manual";
+    window.scrollTo(0, 0);
+    setProgress(0);
+    setHidden(false);
+
     const update = () => {
+      if (!armed) return;
       const total = Math.max(window.innerHeight * 0.9, 1);
       const p = Math.min(Math.max(window.scrollY / total, 0), 1);
       setProgress(p);
@@ -27,13 +37,25 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
         update();
       });
     };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
+
+    armRaf = requestAnimationFrame(() => {
+      window.scrollTo(0, 0);
+      armRaf = requestAnimationFrame(() => {
+        armed = true;
+        update();
+        html.style.scrollBehavior = previousScrollBehavior;
+        window.addEventListener("scroll", onScroll, { passive: true });
+        window.addEventListener("resize", onScroll);
+      });
+    });
+
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
+      if (armRaf) cancelAnimationFrame(armRaf);
+      html.style.scrollBehavior = previousScrollBehavior;
+      window.history.scrollRestoration = previousRestoration;
     };
   }, []);
 
