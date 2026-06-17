@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { Copy, Check, MessageCircle, ShieldCheck } from "lucide-react";
@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { getOrderByCode } from "@/lib/orders.functions";
+import { formatBRL } from "@/lib/format";
 
 const PIX_KEY = "64999611088";
 const WHATSAPP = "5564999611088";
@@ -17,14 +18,25 @@ const orderQuery = (code: string) =>
     queryFn: () => getOrderByCode({ data: { code } }),
   });
 
+function PaymentError({ error, reset }: { error: Error; reset: () => void }) {
+  const router = useRouter();
+  return (
+    <div className="mx-auto max-w-xl px-6 py-24 text-center">
+      <h1 className="font-display text-3xl mb-2">Erro ao carregar o pedido</h1>
+      <p className="text-sm text-muted-foreground mb-6">{error.message}</p>
+      <button onClick={() => { router.invalidate(); reset(); }} className="rounded-full bg-primary text-primary-foreground px-6 py-2.5">Tentar novamente</button>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/pagamento/$code")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(orderQuery(params.code)),
   component: PaymentPage,
+  errorComponent: PaymentError,
+  notFoundComponent: () => <div className="p-10 text-center">Pedido não encontrado.</div>,
 });
 
-function fmt(cents: number) {
-  return `R$ ${(cents / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 })}`;
-}
+const fmt = formatBRL;
 
 function PaymentPage() {
   const { code } = Route.useParams();
