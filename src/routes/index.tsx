@@ -4,7 +4,10 @@ import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesGrid } from "@/components/home/ServicesGrid";
+import { Platforms } from "@/components/home/Platforms";
 import { HowItWorks } from "@/components/home/HowItWorks";
+import { HowToOrder } from "@/components/home/HowToOrder";
+import { Faq } from "@/components/home/Faq";
 import { SiteFooter } from "@/components/home/SiteFooter";
 import { listServices } from "@/lib/orders.functions";
 
@@ -56,7 +59,10 @@ function Index() {
       <Header />
       <HeroSection />
       <ServicesGrid services={services} />
+      <Platforms />
       <HowItWorks />
+      <HowToOrder />
+      <Faq />
       <SiteFooter />
     </>
   );
