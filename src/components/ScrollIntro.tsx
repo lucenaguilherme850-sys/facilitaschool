@@ -1,36 +1,37 @@
 import { useEffect, useRef, useState } from "react";
 
 /**
- * Oryzo-style scroll intro:
- * - Full-screen sticky panel that pins for ~1.5 viewports of scroll
- * - The site name starts small, blurred and dim, then scales up, sharpens,
- *   and brightens as the user scrolls — finally fading out to reveal the page.
+ * Cinematic scroll intro inspired by oryzo.ai:
+ * - Fixed overlay covers the viewport on first load
+ * - As the user scrolls, the brand name zooms IN slightly,
+ *   brightens, sharpens, then the whole overlay fades + scales out
+ *   revealing the page underneath.
+ * - Uses a tall spacer to drive scroll progress, then unmounts.
  */
 export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
-  const wrapRef = useRef<HTMLDivElement>(null);
   const [progress, setProgress] = useState(0);
   const [done, setDone] = useState(false);
+  const spacerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    // Respect reduced motion: skip the intro entirely.
     const mq = window.matchMedia("(prefers-reduced-motion: reduce)");
     if (mq.matches) {
       setDone(true);
       return;
     }
+    // lock scroll restoration to top on mount
+    window.scrollTo(0, 0);
 
     let raf = 0;
     const update = () => {
-      const el = wrapRef.current;
+      const el = spacerRef.current;
       if (!el) return;
-      const rect = el.getBoundingClientRect();
       const total = el.offsetHeight - window.innerHeight;
-      const scrolled = Math.min(Math.max(-rect.top, 0), total);
-      const p = total > 0 ? scrolled / total : 0;
+      const scrolled = Math.min(Math.max(window.scrollY, 0), total);
+      const p = total > 0 ? scrolled / total : 1;
       setProgress(p);
       if (p >= 1) setDone(true);
     };
-
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
@@ -38,7 +39,6 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
         update();
       });
     };
-
     update();
     window.addEventListener("scroll", onScroll, { passive: true });
     window.addEventListener("resize", onScroll);
@@ -49,50 +49,80 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
     };
   }, []);
 
-  // Easing curves
-  const eased = 1 - Math.pow(1 - progress, 3); // easeOutCubic
-  const scale = 0.35 + eased * 7.5; // grows from small → huge
-  const blur = (1 - eased) * 18; // px
-  const letterSpacing = -0.02 + (1 - eased) * 0.25; // em, tightens
-  const textOpacity = 0.25 + eased * 0.75;
-  const fadeOut = progress > 0.82 ? Math.max(0, 1 - (progress - 0.82) / 0.18) : 1;
+  if (done) return null;
+
+  // Easing
+  const ease = (t: number) => 1 - Math.pow(1 - t, 3);
+  const p = ease(progress);
+
+  // Text starts large-but-dim/blurred, ends huge/sharp/bright before the
+  // overlay itself fades + zooms out.
+  const scale = 1 + p * 1.4;
+  const blur = (1 - p) * 14;
+  const tracking = -0.04 + (1 - p) * 0.18; // em
+  const textOpacity = 0.35 + p * 0.65;
+
+  // Last 25% of the timeline: the entire overlay fades + scales out
+  const exitT = Math.max(0, (progress - 0.75) / 0.25);
+  const overlayOpacity = 1 - exitT;
+  const overlayScale = 1 + exitT * 0.15;
 
   return (
-    <div
-      ref={wrapRef}
-      aria-hidden
-      className="relative w-full"
-      style={{ height: done ? 0 : "220vh", pointerEvents: "none" }}
-    >
+    <>
+      {/* Spacer drives scroll progress without affecting layout */}
+      <div ref={spacerRef} aria-hidden style={{ height: "260vh" }} />
+
+      {/* Fixed cinematic overlay */}
       <div
-        className="sticky top-0 left-0 flex h-screen w-full items-center justify-center overflow-hidden"
+        aria-hidden
+        className="fixed inset-0 z-[60] flex items-center justify-center overflow-hidden"
         style={{
-          opacity: fadeOut,
-          visibility: done ? "hidden" : "visible",
-          background:
-            "radial-gradient(120% 80% at 10% 50%, oklch(0.32 0.10 65 / 0.55), transparent 60%), radial-gradient(120% 80% at 90% 50%, oklch(0.20 0.05 160 / 0.45), transparent 60%), var(--background)",
+          opacity: overlayOpacity,
+          transform: `scale(${overlayScale})`,
+          pointerEvents: "none",
+          background: "var(--background)",
+          willChange: "opacity, transform",
         }}
       >
-        {/* subtle grain / vignette */}
+        {/* warm corner glow (oryzo-style) */}
+        <div
+          className="absolute -left-[20%] top-1/2 h-[120vmin] w-[120vmin] -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(closest-side, oklch(0.62 0.16 55 / 0.55), transparent 70%)",
+            filter: "blur(40px)",
+          }}
+        />
+        {/* cool counter-glow */}
+        <div
+          className="absolute -right-[15%] top-1/2 h-[90vmin] w-[90vmin] -translate-y-1/2 rounded-full"
+          style={{
+            background:
+              "radial-gradient(closest-side, oklch(0.38 0.10 162 / 0.45), transparent 70%)",
+            filter: "blur(50px)",
+          }}
+        />
+        {/* vignette */}
         <div
           className="absolute inset-0"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 40%, oklch(0 0 0 / 0.55) 100%)",
+              "radial-gradient(ellipse at center, transparent 35%, oklch(0 0 0 / 0.7) 100%)",
           }}
         />
+
         <h1
           className="relative select-none font-display font-black uppercase will-change-transform"
           style={{
             transform: `scale(${scale})`,
             filter: `blur(${blur}px)`,
-            letterSpacing: `${letterSpacing}em`,
-            color: "var(--gold)",
+            letterSpacing: `${tracking}em`,
             opacity: textOpacity,
-            fontSize: "clamp(2.5rem, 8vw, 7rem)",
-            transition: "color 200ms linear",
+            color: "oklch(0.55 0.04 70)",
+            fontSize: "clamp(4rem, 16vw, 14rem)",
+            lineHeight: 1,
             textShadow:
-              "0 0 60px oklch(0.74 0.14 80 / 0.35), 0 0 120px oklch(0.74 0.14 80 / 0.2)",
+              "0 0 80px oklch(0.74 0.14 80 / 0.35), 0 0 160px oklch(0.62 0.16 55 / 0.25)",
           }}
         >
           {name}
@@ -100,12 +130,12 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
 
         {/* scroll hint */}
         <div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 text-xs uppercase tracking-[0.4em] text-muted-foreground"
-          style={{ opacity: (1 - eased) * 0.8 }}
+          className="absolute bottom-10 left-1/2 -translate-x-1/2 text-[10px] uppercase tracking-[0.5em] text-muted-foreground"
+          style={{ opacity: (1 - p) * 0.8 }}
         >
-          Role para começar ↓
+          Role para entrar ↓
         </div>
       </div>
-    </div>
+    </>
   );
 }
