@@ -111,17 +111,17 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
         />
 
         <h1
-          className="relative select-none font-display font-black uppercase will-change-transform"
+          className="relative select-none font-display font-black uppercase will-change-transform max-w-[92vw] text-center whitespace-nowrap"
           style={{
             transform: `scale(${scale})`,
             filter: `blur(${blur}px)`,
             letterSpacing: `${tracking}em`,
             opacity: textOpacity,
-            color: "oklch(0.55 0.04 70)",
-            fontSize: "clamp(4rem, 16vw, 14rem)",
+            color: "oklch(0.78 0.08 75)",
+            fontSize: "clamp(2.5rem, 11vw, 9rem)",
             lineHeight: 1,
             textShadow:
-              "0 0 80px oklch(0.74 0.14 80 / 0.35), 0 0 160px oklch(0.62 0.16 55 / 0.25)",
+              "0 0 60px oklch(0.74 0.14 80 / 0.4), 0 0 120px oklch(0.62 0.16 55 / 0.3)",
           }}
         >
           {name}
