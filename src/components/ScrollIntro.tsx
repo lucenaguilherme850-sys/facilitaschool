@@ -8,14 +8,8 @@ import { useEffect, useState } from "react";
 export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const [progress, setProgress] = useState(0);
   const [hidden, setHidden] = useState(false);
-  const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setHidden(true);
-      return;
-    }
-
     // Start the cinematic opening at the top, even when the browser restores scroll.
     window.scrollTo(0, 0);
 
@@ -43,7 +37,7 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
     };
   }, []);
 
-  if (hidden || reduceMotion) return null;
+  if (hidden) return null;
 
   const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
   const smoothstep = (edge0: number, edge1: number, value: number) => {
