@@ -58,6 +58,26 @@ function PaymentPage() {
   const { data: order } = useSuspenseQuery(orderQuery(code));
   const [copied, setCopied] = useState<string | null>(null);
 
+  const prevStatusRef = useRef<string | null>(order?.status ?? null);
+  useEffect(() => {
+    if (!order?.status) return;
+    const prev = prevStatusRef.current;
+    if (prev && prev !== order.status) {
+      const meta = getStatusMeta(order.status);
+      toast.success(meta.label, { description: meta.message, duration: 7000 });
+      if ("Notification" in window && Notification.permission === "granted") {
+        try { new Notification(`Pedido ${order.public_code}`, { body: `${meta.label} — ${meta.message}` }); } catch {}
+      }
+    }
+    prevStatusRef.current = order.status;
+  }, [order?.status, order?.public_code]);
+
+  useEffect(() => {
+    if ("Notification" in window && Notification.permission === "default") {
+      Notification.requestPermission().catch(() => undefined);
+    }
+  }, []);
+
   if (!order) {
     return (
       <>
