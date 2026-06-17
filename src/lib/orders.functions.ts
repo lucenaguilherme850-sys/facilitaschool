@@ -83,11 +83,90 @@ export const createOrder = createServerFn({ method: "POST" })
         amount_cents,
         status: "pending_payment",
       })
-      .select("public_code")
+      .select("public_code, id, service_name, customer_name, customer_contact, amount_cents, quantity, created_at")
       .single();
     if (error) throw new Error(error.message);
+
+    // Fire-and-forget Zapier notification
+    await fireZap("order.created", {
+      public_code: inserted.public_code,
+      service_name: inserted.service_name,
+      customer_name: inserted.customer_name,
+      customer_contact: inserted.customer_contact,
+      quantity: inserted.quantity,
+      amount_cents: inserted.amount_cents,
+      amount_brl: (inserted.amount_cents / 100).toFixed(2),
+      created_at: inserted.created_at,
+    });
+
     return { public_code: inserted.public_code };
   });
+
+// ---------- Zapier integration ----------
+
+async function fireZap(event: string, payload: Record<string, unknown>) {
+  try {
+    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+    const { data } = await supabaseAdmin
+      .from("app_settings")
+      .select("value")
+      .eq("key", "zapier_webhook_url")
+      .maybeSingle();
+    const url = (data?.value as { url?: string } | null)?.url;
+    if (!url || !/^https:\/\/hooks\.zapier\.com\//.test(url)) return;
+    await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event,
+        triggered_at: new Date().toISOString(),
+        ...payload,
+      }),
+    });
+  } catch (e) {
+    console.error("[zapier] failed to send", event, e);
+  }
+}
+
+export const getZapierWebhook = createServerFn({ method: "GET" })
+  .middleware([requireSupabaseAuth])
+  .handler(async ({ context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { data } = await context.supabase
+      .from("app_settings")
+      .select("value")
+      .eq("key", "zapier_webhook_url")
+      .maybeSingle();
+    return { url: ((data?.value as { url?: string } | null)?.url ?? "") };
+  });
+
+export const setZapierWebhook = createServerFn({ method: "POST" })
+  .middleware([requireSupabaseAuth])
+  .inputValidator((d: unknown) =>
+    z.object({
+      url: z.string().trim().max(500).refine(
+        (v) => v === "" || /^https:\/\/hooks\.zapier\.com\/hooks\/catch\//.test(v),
+        { message: "URL precisa ser do tipo https://hooks.zapier.com/hooks/catch/..." },
+      ),
+    }).parse(d),
+  )
+  .handler(async ({ data, context }) => {
+    const { data: isAdmin } = await context.supabase.rpc("has_role", {
+      _user_id: context.userId,
+      _role: "admin",
+    });
+    if (!isAdmin) throw new Error("Forbidden");
+    const { error } = await context.supabase
+      .from("app_settings")
+      .upsert({ key: "zapier_webhook_url", value: { url: data.url }, updated_at: new Date().toISOString() });
+    if (error) throw new Error(error.message);
+    return { ok: true };
+  });
+
 
 export const getOrderByCode = createServerFn({ method: "GET" })
   .inputValidator((d: { code: string }) => z.object({ code: z.string().min(4).max(32) }).parse(d))
