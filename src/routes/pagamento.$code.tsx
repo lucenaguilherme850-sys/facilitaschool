@@ -183,8 +183,7 @@ function PaymentPage() {
               </li>
             </ul>
           </div>
-{/* fim aviso */}
-{false && <div hidden></div>}
+
 
           {/* PIX */}
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
