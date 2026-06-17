@@ -56,6 +56,7 @@ function Index() {
   const { data: services } = useSuspenseQuery(servicesQuery);
   return (
     <>
+      <OpeningIntro />
       <Background />
       <Header />
       <HeroSection />
