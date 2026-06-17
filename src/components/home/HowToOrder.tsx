@@ -1,5 +1,5 @@
 import { Reveal } from "@/components/Reveal";
-import { MessageCircle, Link2, CalendarClock, CheckCheck } from "lucide-react";
+import { MessageCircle, Receipt, CalendarClock, CheckCheck } from "lucide-react";
 
 const WHATS_NUMBER = "5564999611088";
 const WHATS_DISPLAY = "+55 (64) 99961-1088";
@@ -10,9 +10,9 @@ const WHATS_LINK = `https://wa.me/${WHATS_NUMBER}?text=${WHATS_MSG}`;
 
 const ITEMS = [
   {
-    icon: Link2,
-    title: "1. Link ou print",
-    desc: "Cole o link da atividade ou manda um print/PDF. Quanto mais claro, mais rápido a gente responde.",
+    icon: Receipt,
+    title: "1. Envie o comprovante",
+    desc: "Após combinarmos o pedido, você faz o Pix e me envia o comprovante no privado. Sem comprovante, o pedido não entra na fila.",
   },
   {
     icon: CalendarClock,
