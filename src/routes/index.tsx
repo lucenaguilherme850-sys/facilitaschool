@@ -185,7 +185,7 @@ function Index() {
       <section id="como-funciona" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24 border-t border-border/40">
         <Reveal>
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-4">Como funciona</div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl mb-10 sm:mb-12 max-w-2xl">Três passos. Sem complicação.</h2>
+          <h2 className="fluid-h2 mb-10 sm:mb-12 max-w-2xl">Três passos. Sem complicação.</h2>
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6">
           {[
