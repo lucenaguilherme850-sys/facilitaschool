@@ -5,7 +5,7 @@ import { ChevronDown } from "lucide-react";
 const FAQ = [
   {
     q: "Quanto tempo demora pra entregar?",
-    a: "Quem define o prazo sou eu, com base na sua tarefa e na demanda do momento. Você manda no WhatsApp, eu analiso e te respondo com o prazo real — só fecho o pedido se conseguir cumprir.",
+    a: "Quem define o prazo sou eu, com base na sua tarefa e na demanda do momento. Pedidos de maior valor são priorizados e entram na frente da fila. Você manda no WhatsApp, eu analiso e te respondo com o prazo real — só fecho o pedido se conseguir cumprir.",
   },
   {
     q: "Como funciona o pagamento?",
