@@ -110,15 +110,24 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: dark; overflow-x: hidden; }
+  html { color-scheme: dark; overflow-x: clip; scroll-behavior: smooth; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    overflow-x: clip;
+    min-height: 100dvh;
+    text-rendering: optimizeLegibility;
   }
-  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; color: var(--primary); }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.02em; color: var(--primary); text-wrap: balance; }
+  p { text-wrap: pretty; }
+  img, video { max-width: 100%; height: auto; }
+  /* Hover effects only on devices that actually hover (avoid sticky hover on touch) */
+  @media (hover: none) {
+    .lift:hover { transform: none; }
+  }
+
 }
 
 @layer utilities {
