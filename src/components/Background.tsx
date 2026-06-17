@@ -54,29 +54,29 @@ export function Background() {
 
       {/* Drifting gold glow top-right */}
       <div
-        className="absolute -top-40 -right-40 h-[720px] w-[720px] rounded-full blur-3xl opacity-40 will-change-transform"
+        className="absolute -top-40 -right-40 h-[820px] w-[820px] rounded-full blur-3xl opacity-80 will-change-transform"
         style={{
           background:
-            "radial-gradient(closest-side, oklch(0.78 0.12 82 / 0.45), transparent 70%)",
+            "radial-gradient(closest-side, oklch(0.78 0.16 82 / 0.75), transparent 70%)",
           animation: reduced ? undefined : "orb-drift 22s ease-in-out infinite",
         }}
       />
       {/* Drifting soft gold glow bottom-left (counter-phase) */}
       <div
-        className="absolute -bottom-40 -left-40 h-[560px] w-[560px] rounded-full blur-3xl opacity-30 will-change-transform"
+        className="absolute -bottom-40 -left-40 h-[680px] w-[680px] rounded-full blur-3xl opacity-70 will-change-transform"
         style={{
           background:
-            "radial-gradient(closest-side, oklch(0.87 0.10 88 / 0.30), transparent 70%)",
+            "radial-gradient(closest-side, oklch(0.87 0.14 88 / 0.55), transparent 70%)",
           animation: reduced ? undefined : "orb-drift 28s ease-in-out infinite reverse",
           animationDelay: "-6s",
         }}
       />
       {/* Slow-pulsing accent orb center */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[420px] w-[420px] rounded-full blur-3xl"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[520px] w-[520px] rounded-full blur-3xl opacity-90"
         style={{
           background:
-            "radial-gradient(closest-side, oklch(0.78 0.12 82 / 0.10), transparent 70%)",
+            "radial-gradient(closest-side, oklch(0.78 0.14 82 / 0.28), transparent 70%)",
           animation: reduced ? undefined : "pulse-soft 9s ease-in-out infinite",
         }}
       />
@@ -85,10 +85,10 @@ export function Background() {
       {!reduced && (
         <div
           ref={spotRef}
-          className="absolute top-0 left-0 h-[700px] w-[700px] rounded-full blur-3xl will-change-transform"
+          className="absolute top-0 left-0 h-[760px] w-[760px] rounded-full blur-3xl will-change-transform"
           style={{
             background:
-              "radial-gradient(closest-side, oklch(0.78 0.12 82 / 0.12), transparent 70%)",
+              "radial-gradient(closest-side, oklch(0.82 0.14 82 / 0.22), transparent 70%)",
           }}
         />
       )}
@@ -97,18 +97,18 @@ export function Background() {
       {!reduced && (
         <>
           <div
-            className="absolute -top-1/4 left-0 h-[160%] w-[18%] blur-2xl will-change-transform"
+            className="absolute -top-1/4 left-0 h-[160%] w-[22%] blur-2xl will-change-transform"
             style={{
               background:
-                "linear-gradient(90deg, transparent, oklch(0.87 0.10 88 / 0.18), transparent)",
+                "linear-gradient(90deg, transparent, oklch(0.90 0.12 88 / 0.42), transparent)",
               animation: "beam-sweep 14s ease-in-out infinite",
             }}
           />
           <div
-            className="absolute -top-1/4 left-0 h-[160%] w-[10%] blur-3xl will-change-transform"
+            className="absolute -top-1/4 left-0 h-[160%] w-[14%] blur-3xl will-change-transform"
             style={{
               background:
-                "linear-gradient(90deg, transparent, oklch(0.78 0.12 82 / 0.22), transparent)",
+                "linear-gradient(90deg, transparent, oklch(0.78 0.16 82 / 0.50), transparent)",
               animation: "beam-sweep 22s ease-in-out infinite",
               animationDelay: "-7s",
             }}
@@ -118,10 +118,10 @@ export function Background() {
 
       {/* Slow conic sweep behind everything */}
       <div
-        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120vmax] w-[120vmax] opacity-[0.05] will-change-transform"
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120vmax] w-[120vmax] opacity-[0.14] will-change-transform"
         style={{
           background:
-            "conic-gradient(from 0deg, transparent 0deg, oklch(0.78 0.12 82 / 0.5) 60deg, transparent 120deg, transparent 240deg, oklch(0.87 0.10 88 / 0.4) 300deg, transparent 360deg)",
+            "conic-gradient(from 0deg, transparent 0deg, oklch(0.78 0.16 82 / 0.8) 60deg, transparent 120deg, transparent 240deg, oklch(0.87 0.14 88 / 0.7) 300deg, transparent 360deg)",
           animation: reduced ? undefined : "conic-spin 60s linear infinite",
         }}
       />
