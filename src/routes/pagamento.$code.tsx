@@ -168,6 +168,23 @@ function PaymentPage() {
             <p className="text-xs text-muted-foreground mt-3">Guarde este código. Envie-o junto com o comprovante.</p>
           </div>
 
+          {/* AVISO DE RESPONSABILIDADE */}
+          <div className="rounded-xl border border-red-400/40 bg-red-400/5 p-4 mb-6 text-sm">
+            <div className="font-semibold text-red-300 mb-2">⚠️ Importante — leia com atenção</div>
+            <ul className="space-y-1.5 list-disc pl-5 text-muted-foreground">
+              <li>
+                <strong className="text-foreground">Guarde o código <span className="font-mono text-gold">{order.public_code}</span></strong>. Ele é a única forma de localizar seu pedido. <strong className="text-foreground">Se você perder o código, não me responsabilizo</strong> por falhas em encontrar ou acompanhar o atendimento.
+              </li>
+              <li>
+                Se você notar que colocou alguma <strong className="text-foreground">informação errada</strong> (login, senha, dados do pedido), me chame <strong className="text-foreground">agora mesmo no WhatsApp informando o código acima</strong>.
+              </li>
+              <li>
+                O contato (WhatsApp ou e-mail) que você informou precisa estar <strong className="text-foreground">correto</strong> — é por ele que avisamos qualquer problema. <strong className="text-foreground">Contato errado = sem aviso, e não me responsabilizo</strong> pelo atraso ou pela não entrega.
+              </li>
+            </ul>
+          </div>
+
+
           {/* PIX */}
           <div className="grid sm:grid-cols-2 gap-4 mb-6">
             <div className="rounded-xl border border-border bg-input p-5">

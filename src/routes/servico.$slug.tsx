@@ -171,9 +171,14 @@ function ServicePage() {
               </Field>
               <Field label="WhatsApp ou e-mail *" error={errors.contact}>
                 <input value={contact} onChange={(e) => setContact(e.target.value)} className="ui-input" placeholder="(64) 99999-9999 ou seu@email.com" maxLength={160} />
-                <p className="mt-1.5 text-[11px] text-muted-foreground leading-relaxed">
-                  ⚠️ Obrigatório — usamos este contato para te avisar se houver qualquer problema (senha incorreta, usuário não encontrado, dúvidas sobre o pedido, etc.).
-                </p>
+                <div className="mt-2 rounded-lg border border-red-400/40 bg-red-400/5 p-3 text-[11.5px] leading-relaxed text-foreground/90">
+                  <p className="font-semibold text-red-300 mb-1">⚠️ Atenção — leia antes de continuar</p>
+                  <ul className="space-y-1 list-disc pl-4 text-muted-foreground">
+                    <li>É <strong className="text-foreground">obrigatório</strong> informar um WhatsApp ou e-mail <strong className="text-foreground">válido e correto</strong>. Usamos este contato para te avisar se algo der errado (senha incorreta, login não encontrado, dúvida, etc.).</li>
+                    <li><strong className="text-foreground">Se você colocar dados errados</strong> (login, senha ou contato), não consigo te avisar e <strong className="text-foreground">não me responsabilizo</strong> pelo atraso ou pela não entrega do serviço.</li>
+                    <li>Confira tudo antes de enviar. Se identificar erro depois, me chame no WhatsApp <strong className="text-foreground">informando o código do pedido</strong> que será gerado na próxima tela.</li>
+                  </ul>
+                </div>
               </Field>
 
               {cfg.fields.map((f) => (
