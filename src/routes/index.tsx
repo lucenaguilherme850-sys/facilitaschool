@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { queryOptions } from "@tanstack/react-query";
 import { ArrowRight, Lock, Zap, ShieldCheck, CheckCircle2 } from "lucide-react";
@@ -6,12 +6,24 @@ import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { Reveal } from "@/components/Reveal";
 import { listServices } from "@/lib/orders.functions";
+import { formatPriceUnit } from "@/lib/format";
 
 const servicesQuery = queryOptions({
   queryKey: ["services"],
   queryFn: () => listServices(),
   staleTime: 5 * 60_000,
 });
+
+function RouteError({ error, reset }: { error: Error; reset: () => void }) {
+  const router = useRouter();
+  return (
+    <div className="mx-auto max-w-xl px-6 py-24 text-center">
+      <h1 className="font-display text-3xl mb-2">Não foi possível carregar</h1>
+      <p className="text-sm text-muted-foreground mb-6">{error.message}</p>
+      <button onClick={() => { router.invalidate(); reset(); }} className="rounded-full bg-primary text-primary-foreground px-6 py-2.5">Tentar novamente</button>
+    </div>
+  );
+}
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -24,12 +36,14 @@ export const Route = createFileRoute("/")({
   }),
   loader: ({ context }) => context.queryClient.ensureQueryData(servicesQuery),
   component: Index,
+  errorComponent: RouteError,
+  notFoundComponent: () => <div className="p-10 text-center">Página não encontrada.</div>,
 });
 
 function priceLabel(cents: number, unit: string) {
-  const v = (cents / 100).toLocaleString("pt-BR", { minimumFractionDigits: 2 });
-  return `R$ ${v} / ${unit}`;
+  return formatPriceUnit(cents, unit);
 }
+
 
 function Index() {
   const { data: services } = useSuspenseQuery(servicesQuery);
