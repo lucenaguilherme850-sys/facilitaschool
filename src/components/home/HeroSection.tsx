@@ -28,6 +28,16 @@ const cardIn: Variants = {
 };
 
 export function HeroSection() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = heroRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty("--mouse-y", `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   return (
     <section className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-16">
       <motion.div
@@ -38,14 +48,27 @@ export function HeroSection() {
       >
         {/* Main hero cell */}
         <motion.div
+          ref={heroRef}
+          onMouseMove={handleMouseMove}
           variants={cardIn}
-          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px]"
+          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px] group/hero"
+          style={{ ["--mouse-x" as string]: "50%", ["--mouse-y" as string]: "50%" }}
         >
+          {/* Cursor spotlight */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-700"
+            style={{
+              background:
+                "radial-gradient(420px circle at var(--mouse-x) var(--mouse-y), oklch(0.78 0.14 82 / 0.18), transparent 60%)",
+            }}
+          />
           <motion.div
             className="orb h-[420px] w-[420px] -top-32 -right-32 opacity-100"
             animate={{ y: [0, 18, 0], x: [0, -10, 0] }}
             transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
           />
+
 
           <div className="relative z-10">
             <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8">
