@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /**
  * Cinematic scroll intro inspired by oryzo.ai.
@@ -7,29 +7,20 @@ import { useEffect, useState } from "react";
  */
 export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const [progress, setProgress] = useState(0);
-  const [hidden, setHidden] = useState(false);
+  const sectionRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    const html = document.documentElement;
-    const previousScrollBehavior = html.style.scrollBehavior;
-    const previousRestoration = window.history.scrollRestoration;
     let raf = 0;
-    let armRaf = 0;
-    let armed = false;
-
-    html.style.scrollBehavior = "auto";
-    window.history.scrollRestoration = "manual";
-    window.scrollTo(0, 0);
-    setProgress(0);
-    setHidden(false);
 
     const update = () => {
-      if (!armed) return;
-      const total = Math.max(window.innerHeight * 0.9, 1);
-      const p = Math.min(Math.max(window.scrollY / total, 0), 1);
+      const el = sectionRef.current;
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const total = Math.max(el.offsetHeight - window.innerHeight, 1);
+      const p = Math.min(Math.max(-rect.top / total, 0), 1);
       setProgress(p);
-      setHidden(p >= 0.995);
     };
+
     const onScroll = () => {
       if (raf) return;
       raf = requestAnimationFrame(() => {
@@ -38,28 +29,16 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
       });
     };
 
-    armRaf = requestAnimationFrame(() => {
-      window.scrollTo(0, 0);
-      armRaf = requestAnimationFrame(() => {
-        armed = true;
-        update();
-        html.style.scrollBehavior = previousScrollBehavior;
-        window.addEventListener("scroll", onScroll, { passive: true });
-        window.addEventListener("resize", onScroll);
-      });
-    });
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
 
     return () => {
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onScroll);
       if (raf) cancelAnimationFrame(raf);
-      if (armRaf) cancelAnimationFrame(armRaf);
-      html.style.scrollBehavior = previousScrollBehavior;
-      window.history.scrollRestoration = previousRestoration;
     };
   }, []);
-
-  if (hidden) return null;
 
   const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
   const smoothstep = (edge0: number, edge1: number, value: number) => {
@@ -78,72 +57,44 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const overlayScale = 1 + overlayExit * 0.05;
 
   return (
-    <div
-      aria-hidden
-      className="fixed inset-0 z-[9999] flex min-h-dvh items-center justify-center overflow-hidden"
-      style={{
-        opacity: overlayOpacity,
-        transform: `scale(${overlayScale})`,
-        pointerEvents: overlayOpacity > 0.04 ? "auto" : "none",
-        background: "var(--background)",
-        willChange: "opacity, transform",
-      }}
-    >
+    <section ref={sectionRef} className="relative h-[185dvh]" aria-label="Abertura Facilit">
       <div
-        className="absolute -left-[18%] top-1/2 h-[110vmin] w-[110vmin] -translate-y-1/2 rounded-full"
+        className="sticky top-0 z-[70] flex h-dvh items-center justify-center overflow-hidden"
         style={{
-          background:
-            "radial-gradient(closest-side, color-mix(in oklch, var(--gold) 70%, transparent), transparent 70%)",
-          filter: "blur(46px)",
-          opacity: 0.72,
-        }}
-      />
-      <div
-        className="absolute -right-[14%] top-1/2 h-[86vmin] w-[86vmin] -translate-y-1/2 rounded-full"
-        style={{
-          background:
-            "radial-gradient(closest-side, color-mix(in oklch, var(--primary) 58%, transparent), transparent 70%)",
-          filter: "blur(54px)",
-          opacity: 0.62,
-        }}
-      />
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 30%, oklch(0 0 0 / 0.72) 100%)",
-        }}
-      />
-
-      <div
-        className="relative z-10 max-w-[94vw] select-none whitespace-nowrap text-center font-display font-black uppercase will-change-transform"
-        style={{
-          transform: `scale(${scale})`,
-          filter: `blur(${blur}px)`,
-          letterSpacing: `${tracking}em`,
-          opacity: textOpacity,
-          fontSize: "clamp(3rem, 13vw, 11rem)",
-          lineHeight: 1,
+          opacity: overlayOpacity,
+          transform: `scale(${overlayScale})`,
+          background: "var(--background)",
+          willChange: "opacity, transform",
         }}
       >
-        <span
-          className="block"
+        <div className="absolute -left-[18%] top-1/2 h-[110vmin] w-[110vmin] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(244,213,111,0.42),transparent_70%)] blur-3xl" />
+        <div className="absolute -right-[14%] top-1/2 h-[86vmin] w-[86vmin] -translate-y-1/2 rounded-full bg-[radial-gradient(closest-side,rgba(54,211,153,0.32),transparent_70%)] blur-3xl" />
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(0,0,0,0.72)_100%)]" />
+
+        <h1
+          className="relative z-10 max-w-[94vw] select-none whitespace-nowrap text-center font-display font-black uppercase text-[#f4d56f]"
           style={{
-            color: "#f4d56f",
+            transform: `scale(${scale})`,
+            filter: `blur(${blur}px)`,
+            letterSpacing: `${tracking}em`,
+            opacity: textOpacity,
+            fontSize: "clamp(3rem, 13vw, 11rem)",
+            lineHeight: 1,
             textShadow: "0 0 32px rgba(244, 213, 111, 0.58), 0 0 96px rgba(54, 211, 153, 0.35)",
+            willChange: "opacity, transform, filter",
           }}
         >
           {name}
-        </span>
-      </div>
+        </h1>
 
-      <div
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse text-center text-[10px] font-semibold uppercase text-muted-foreground"
-        style={{ letterSpacing: "0.38em", opacity: (1 - exit) * 0.82 }}
-      >
-        Role para entrar ↓
+        <div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse text-center text-[10px] font-semibold uppercase text-muted-foreground"
+          style={{ letterSpacing: "0.38em", opacity: (1 - exit) * 0.82 }}
+        >
+          Role para entrar ↓
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 
