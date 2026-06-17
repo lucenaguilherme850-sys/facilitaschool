@@ -68,12 +68,12 @@ function Index() {
               <span className="text-[10px] uppercase tracking-[0.3em] font-semibold text-gold">Serviços</span>
             </div>
 
-            <h1 className="text-4xl sm:text-5xl md:text-7xl lg:text-[5.5rem] leading-[1.05] text-balance mb-6 sm:mb-8" style={{ animation: "var(--animate-blur-in)" }}>
+            <h1 className="fluid-display text-balance mb-6 sm:mb-8" style={{ animation: "var(--animate-blur-in)" }}>
               Chega de professor <em className="not-italic italic text-gold">no seu pé.</em>
             </h1>
 
 
-            <p className="text-base sm:text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed mb-8 sm:mb-10" style={{ animation: "var(--animate-blur-in)", animationDelay: "180ms" }}>
+            <p className="fluid-lead text-muted-foreground max-w-xl mb-8 sm:mb-10" style={{ animation: "var(--animate-blur-in)", animationDelay: "180ms" }}>
               A Facilit faz suas atividades de GoEnglish, Netescola e Revisa Goiás <strong className="text-foreground">no prazo</strong>, com sigilo total. Você paga via Pix e a gente entrega — simples assim.
             </p>
 
@@ -185,7 +185,7 @@ function Index() {
       <section id="como-funciona" className="mx-auto max-w-6xl px-4 sm:px-6 py-16 sm:py-24 border-t border-border/40">
         <Reveal>
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-4">Como funciona</div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl mb-10 sm:mb-12 max-w-2xl">Três passos. Sem complicação.</h2>
+          <h2 className="fluid-h2 mb-10 sm:mb-12 max-w-2xl">Três passos. Sem complicação.</h2>
         </Reveal>
         <div className="grid md:grid-cols-3 gap-6">
           {[
