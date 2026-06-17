@@ -22,9 +22,7 @@ export function ServicesGrid({ services }: { services: Service[] }) {
       </Reveal>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
         {services.map((service, i) => (
-          <Reveal key={service.id} delay={i * 110}>
-            <ServiceCard service={service} index={i} />
-          </Reveal>
+          <ServiceCard key={service.id} service={service} index={i} />
         ))}
       </div>
     </section>
