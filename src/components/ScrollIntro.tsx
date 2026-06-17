@@ -8,8 +8,14 @@ import { useEffect, useState } from "react";
 export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const [progress, setProgress] = useState(0);
   const [hidden, setHidden] = useState(false);
+  const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
   useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setHidden(true);
+      return;
+    }
+
     // Start the cinematic opening at the top, even when the browser restores scroll.
     window.scrollTo(0, 0);
 
@@ -37,7 +43,7 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
     };
   }, []);
 
-  if (hidden) return null;
+  if (hidden || reduceMotion) return null;
 
   const clamp01 = (t: number) => Math.min(Math.max(t, 0), 1);
   const smoothstep = (edge0: number, edge1: number, value: number) => {
@@ -47,9 +53,9 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
 
   const exit = smoothstep(0.08, 0.92, progress);
   const overlayExit = smoothstep(0.52, 1, progress);
-  const scale = 1 + exit * 0.42;
-  const blur = exit * 14;
-  const tracking = 0.01 + exit * 0.1;
+  const scale = 1 + exit * 0.36;
+  const blur = exit * 10;
+  const tracking = 0.01 + exit * 0.08;
   const textOpacity = 1 - smoothstep(0.2, 0.82, progress);
 
   const overlayOpacity = 1 - overlayExit;
@@ -93,22 +99,27 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
         }}
       />
 
-      <h1
-        className="relative max-w-[94vw] select-none whitespace-nowrap text-center font-display font-black uppercase will-change-transform"
+      <div
+        className="relative z-10 max-w-[94vw] select-none whitespace-nowrap text-center font-display font-black uppercase will-change-transform"
         style={{
           transform: `scale(${scale})`,
           filter: `blur(${blur}px)`,
           letterSpacing: `${tracking}em`,
           opacity: textOpacity,
-          color: "var(--gold)",
           fontSize: "clamp(3rem, 13vw, 11rem)",
           lineHeight: 1,
-          textShadow:
-            "0 0 34px color-mix(in oklch, var(--gold) 60%, transparent), 0 0 110px color-mix(in oklch, var(--primary) 38%, transparent)",
         }}
       >
-        {name}
-      </h1>
+        <span
+          className="block"
+          style={{
+            color: "#f4d56f",
+            textShadow: "0 0 32px rgba(244, 213, 111, 0.58), 0 0 96px rgba(54, 211, 153, 0.35)",
+          }}
+        >
+          {name}
+        </span>
+      </div>
 
       <div
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-pulse text-center text-[10px] font-semibold uppercase text-muted-foreground"
