@@ -59,7 +59,10 @@ function Index() {
       <Header />
       <HeroSection />
       <ServicesGrid services={services} />
+      <Platforms />
       <HowItWorks />
+      <HowToOrder />
+      <Faq />
       <SiteFooter />
     </>
   );
