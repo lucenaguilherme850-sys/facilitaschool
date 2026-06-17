@@ -99,24 +99,10 @@ export const getOrderByCode = createServerFn({ method: "GET" })
     return row ?? null;
   });
 
-export const attachProof = createServerFn({ method: "POST" })
-  .inputValidator((d: unknown) =>
-    z.object({ code: z.string().min(4).max(32), proof_url: z.string().min(3).max(500) }).parse(d),
-  )
-  .handler(async ({ data }) => {
-    const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
-    const { error } = await supabaseAdmin
-      .from("orders")
-      .update({
-        proof_url: data.proof_url,
-        proof_uploaded_at: new Date().toISOString(),
-        status: "awaiting_review",
-      })
-      .eq("public_code", data.code)
-      .eq("status", "pending_payment");
-    if (error) throw new Error(error.message);
-    return { ok: true };
-  });
+// attachProof removido — comprovante é enviado via WhatsApp, não via endpoint público.
+// Manter um endpoint anônimo que aceita URL arbitrária permitiria injeção de links
+// maliciosos no painel admin (stored content injection). Se voltar a ser necessário,
+// exigir upload direto ao bucket `proofs` com path validado contra o code do pedido.
 
 // ---------- Admin ----------
 
