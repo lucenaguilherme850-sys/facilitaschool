@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { getServiceBySlug, createOrder } from "@/lib/orders.functions";
+import { formatBRL } from "@/lib/format";
 
 const serviceQuery = (slug: string) =>
   queryOptions({
@@ -15,9 +16,21 @@ const serviceQuery = (slug: string) =>
     staleTime: 5 * 60_000,
   });
 
+function ServiceError({ error, reset }: { error: Error; reset: () => void }) {
+  const router = useRouter();
+  return (
+    <div className="mx-auto max-w-xl px-6 py-24 text-center">
+      <h1 className="font-display text-3xl mb-2">Erro ao carregar o serviço</h1>
+      <p className="text-sm text-muted-foreground mb-6">{error.message}</p>
+      <button onClick={() => { router.invalidate(); reset(); }} className="rounded-full bg-primary text-primary-foreground px-6 py-2.5">Tentar novamente</button>
+    </div>
+  );
+}
+
 export const Route = createFileRoute("/servico/$slug")({
   loader: ({ context, params }) => context.queryClient.ensureQueryData(serviceQuery(params.slug)),
   component: ServicePage,
+  errorComponent: ServiceError,
   notFoundComponent: () => <div className="p-10">Serviço não encontrado.</div>,
 });
 
