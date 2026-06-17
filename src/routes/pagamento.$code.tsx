@@ -1,5 +1,5 @@
 import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { queryOptions, useSuspenseQuery, useQuery } from "@tanstack/react-query";
+import { queryOptions, useSuspenseQuery } from "@tanstack/react-query";
 import { useState, useEffect, useRef } from "react";
 import { Copy, Check, MessageCircle, ShieldCheck, Clock, Loader2, CheckCircle2, Sparkles } from "lucide-react";
 import { toast } from "sonner";
