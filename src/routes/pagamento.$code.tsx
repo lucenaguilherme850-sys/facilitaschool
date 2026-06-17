@@ -128,6 +128,28 @@ function PaymentPage() {
       </div>
 
       <div className="mx-auto max-w-3xl px-4 sm:px-6 py-8 sm:py-10 space-y-5 sm:space-y-6">
+        {/* STATUS BANNER — atualiza sozinho a cada poucos segundos */}
+        {(() => {
+          const meta = getStatusMeta(order.status);
+          const Icon = meta.icon;
+          const animate = order.status === "in_progress";
+          return (
+            <div className={`rounded-2xl border p-4 sm:p-5 flex items-center gap-4 animate-fade-up ${meta.tone}`}>
+              <div className="h-11 w-11 rounded-full bg-card border border-current/30 flex items-center justify-center shrink-0">
+                <Icon className={`h-5 w-5 ${animate ? "animate-spin" : ""}`} />
+              </div>
+              <div className="flex-1 min-w-0">
+                <div className="text-[10px] uppercase tracking-[0.25em] opacity-80 font-semibold">Status do pedido</div>
+                <div className="font-display text-lg sm:text-xl text-foreground">{meta.label}</div>
+                <div className="text-xs text-muted-foreground mt-0.5">{meta.message}</div>
+              </div>
+              <span className="hidden sm:inline-flex items-center gap-1.5 text-[10px] uppercase tracking-wider text-muted-foreground">
+                <span className="h-1.5 w-1.5 rounded-full bg-current animate-pulse" /> Ao vivo
+              </span>
+            </div>
+          );
+        })()}
+
         {/* CONFIRM */}
         <div className="rounded-2xl bg-card shadow-card border border-border/60 p-5 sm:p-8 animate-fade-up">
           <div className="text-xs uppercase tracking-[0.2em] text-gold mb-3">Pedido criado</div>
