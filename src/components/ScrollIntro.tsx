@@ -55,17 +55,16 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
   const ease = (t: number) => 1 - Math.pow(1 - t, 3);
   const p = ease(progress);
 
-  // Text starts large-but-dim/blurred, ends huge/sharp/bright before the
-  // overlay itself fades + zooms out.
-  const scale = 1 + p * 1.4;
-  const blur = (1 - p) * 14;
-  const tracking = -0.04 + (1 - p) * 0.18; // em
-  const textOpacity = 0.35 + p * 0.65;
+  // Text starts small + blurred, grows to a controlled max while staying inside the viewport
+  const scale = 0.85 + p * 0.35;
+  const blur = (1 - p) * 10;
+  const tracking = -0.02 + (1 - p) * 0.12; // em
+  const textOpacity = 0.3 + p * 0.7;
 
   // Last 25% of the timeline: the entire overlay fades + scales out
   const exitT = Math.max(0, (progress - 0.75) / 0.25);
   const overlayOpacity = 1 - exitT;
-  const overlayScale = 1 + exitT * 0.15;
+  const overlayScale = 1 + exitT * 0.08;
 
   return (
     <>
@@ -112,17 +111,17 @@ export function ScrollIntro({ name = "FACILIT" }: { name?: string }) {
         />
 
         <h1
-          className="relative select-none font-display font-black uppercase will-change-transform"
+          className="relative select-none font-display font-black uppercase will-change-transform max-w-[92vw] text-center whitespace-nowrap"
           style={{
             transform: `scale(${scale})`,
             filter: `blur(${blur}px)`,
             letterSpacing: `${tracking}em`,
             opacity: textOpacity,
-            color: "oklch(0.55 0.04 70)",
-            fontSize: "clamp(4rem, 16vw, 14rem)",
+            color: "oklch(0.78 0.08 75)",
+            fontSize: "clamp(2.5rem, 11vw, 9rem)",
             lineHeight: 1,
             textShadow:
-              "0 0 80px oklch(0.74 0.14 80 / 0.35), 0 0 160px oklch(0.62 0.16 55 / 0.25)",
+              "0 0 60px oklch(0.74 0.14 80 / 0.4), 0 0 120px oklch(0.62 0.16 55 / 0.3)",
           }}
         >
           {name}
