@@ -93,6 +93,39 @@ export function Background() {
         />
       )}
 
+      {/* Diagonal light beam sweep */}
+      {!reduced && (
+        <>
+          <div
+            className="absolute -top-1/4 left-0 h-[160%] w-[18%] blur-2xl will-change-transform"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, oklch(0.87 0.10 88 / 0.18), transparent)",
+              animation: "beam-sweep 14s ease-in-out infinite",
+            }}
+          />
+          <div
+            className="absolute -top-1/4 left-0 h-[160%] w-[10%] blur-3xl will-change-transform"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent, oklch(0.78 0.12 82 / 0.22), transparent)",
+              animation: "beam-sweep 22s ease-in-out infinite",
+              animationDelay: "-7s",
+            }}
+          />
+        </>
+      )}
+
+      {/* Slow conic sweep behind everything */}
+      <div
+        className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-[120vmax] w-[120vmax] opacity-[0.05] will-change-transform"
+        style={{
+          background:
+            "conic-gradient(from 0deg, transparent 0deg, oklch(0.78 0.12 82 / 0.5) 60deg, transparent 120deg, transparent 240deg, oklch(0.87 0.10 88 / 0.4) 300deg, transparent 360deg)",
+          animation: reduced ? undefined : "conic-spin 60s linear infinite",
+        }}
+      />
+
       {/* Subtle panning grid */}
       <div
         className="absolute inset-0 bg-grid opacity-30"
