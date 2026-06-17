@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { LogOut, RefreshCcw, ExternalLink, ChevronDown, ChevronUp, Copy, Download, Search, Trash2 } from "lucide-react";
 import { Background } from "@/components/Background";
 import { adminListOrders, adminUpdateOrderStatus, adminGetProofSignedUrl, checkIsAdmin, adminDeleteOrder } from "@/lib/orders.functions";
+import { ZapierSettings } from "@/components/admin/ZapierSettings";
 import { supabase } from "@/integrations/supabase/client";
 
 export const Route = createFileRoute("/_authenticated/admin")({
