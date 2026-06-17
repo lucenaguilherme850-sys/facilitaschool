@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as QrRouteImport } from './routes/qr'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
 import { Route as IndexRouteImport } from './routes/index'
@@ -16,6 +17,11 @@ import { Route as ServicoSlugRouteImport } from './routes/servico.$slug'
 import { Route as PagamentoCodeRouteImport } from './routes/pagamento.$code'
 import { Route as AuthenticatedAdminRouteImport } from './routes/_authenticated/admin'
 
+const QrRoute = QrRouteImport.update({
+  id: '/qr',
+  path: '/qr',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthRoute = AuthRouteImport.update({
   id: '/auth',
   path: '/auth',
@@ -49,6 +55,7 @@ const AuthenticatedAdminRoute = AuthenticatedAdminRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/qr': typeof QrRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/pagamento/$code': typeof PagamentoCodeRoute
   '/servico/$slug': typeof ServicoSlugRoute
@@ -56,6 +63,7 @@ export interface FileRoutesByFullPath {
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/auth': typeof AuthRoute
+  '/qr': typeof QrRoute
   '/admin': typeof AuthenticatedAdminRoute
   '/pagamento/$code': typeof PagamentoCodeRoute
   '/servico/$slug': typeof ServicoSlugRoute
@@ -65,20 +73,28 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/auth': typeof AuthRoute
+  '/qr': typeof QrRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRoute
   '/pagamento/$code': typeof PagamentoCodeRoute
   '/servico/$slug': typeof ServicoSlugRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/auth' | '/admin' | '/pagamento/$code' | '/servico/$slug'
+  fullPaths:
+    | '/'
+    | '/auth'
+    | '/qr'
+    | '/admin'
+    | '/pagamento/$code'
+    | '/servico/$slug'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/auth' | '/admin' | '/pagamento/$code' | '/servico/$slug'
+  to: '/' | '/auth' | '/qr' | '/admin' | '/pagamento/$code' | '/servico/$slug'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/auth'
+    | '/qr'
     | '/_authenticated/admin'
     | '/pagamento/$code'
     | '/servico/$slug'
@@ -88,12 +104,20 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
   AuthRoute: typeof AuthRoute
+  QrRoute: typeof QrRoute
   PagamentoCodeRoute: typeof PagamentoCodeRoute
   ServicoSlugRoute: typeof ServicoSlugRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/qr': {
+      id: '/qr'
+      path: '/qr'
+      fullPath: '/qr'
+      preLoaderRoute: typeof QrRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/auth': {
       id: '/auth'
       path: '/auth'
@@ -154,6 +178,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
   AuthRoute: AuthRoute,
+  QrRoute: QrRoute,
   PagamentoCodeRoute: PagamentoCodeRoute,
   ServicoSlugRoute: ServicoSlugRoute,
 }
