@@ -2,6 +2,7 @@ import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useSuspenseQuery, queryOptions } from "@tanstack/react-query";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
+import { OpeningIntro } from "@/components/OpeningIntro";
 import { HeroSection } from "@/components/home/HeroSection";
 import { ServicesGrid } from "@/components/home/ServicesGrid";
 import { Platforms } from "@/components/home/Platforms";
@@ -55,6 +56,7 @@ function Index() {
   const { data: services } = useSuspenseQuery(servicesQuery);
   return (
     <>
+      <OpeningIntro />
       <Background />
       <Header />
       <HeroSection />
