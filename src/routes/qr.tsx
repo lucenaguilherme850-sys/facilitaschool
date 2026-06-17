@@ -44,7 +44,7 @@ function QrPage() {
           <div className="text-xs uppercase tracking-[0.3em] text-gold mb-2">Facilit</div>
           <h1 className="font-display text-3xl mb-3">Bora facilitar sua vida escolar? 🚀</h1>
           <p className="text-sm text-muted-foreground mb-6">
-            Trabalhos, resumos e provas sem stress. Aponta a câmera, escaneia e descobre como a gente te ajuda a tirar nota alta sobrando tempo pra Netflix. 🎬✨
+            NetEscola, So-Vem-Enem, GoEnglish e IFASEM B.O. Aponta a câmera, escaneia e descobre como a gente te ajuda a tirar nota alta sobrando tempo pra Netflix. 🎬✨
           </p>
           <img
             src={QR_SRC}
