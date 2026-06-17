@@ -1,8 +1,11 @@
 import { Link } from "@tanstack/react-router";
 import { ShieldCheck } from "lucide-react";
 import { motion, type Variants } from "framer-motion";
+import { useRef, type MouseEvent } from "react";
 
 const ease = [0.16, 1, 0.3, 1] as const;
+
+const TRUST_ITEMS = ["Entrega no prazo", "Pagamento via Pix", "100% Sigilo", "Sem cadastro", "Suporte humano", "Resposta em minutos"];
 
 const container: Variants = {
   hidden: {},
@@ -25,6 +28,16 @@ const cardIn: Variants = {
 };
 
 export function HeroSection() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const el = heroRef.current;
+    if (!el) return;
+    const r = el.getBoundingClientRect();
+    el.style.setProperty("--mouse-x", `${((e.clientX - r.left) / r.width) * 100}%`);
+    el.style.setProperty("--mouse-y", `${((e.clientY - r.top) / r.height) * 100}%`);
+  };
+
   return (
     <section className="relative mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 pt-8 sm:pt-12 pb-16">
       <motion.div
@@ -35,14 +48,27 @@ export function HeroSection() {
       >
         {/* Main hero cell */}
         <motion.div
+          ref={heroRef}
+          onMouseMove={handleMouseMove}
           variants={cardIn}
-          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px]"
+          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px] group/hero"
+          style={{ ["--mouse-x" as string]: "50%", ["--mouse-y" as string]: "50%" }}
         >
+          {/* Cursor spotlight */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 opacity-0 group-hover/hero:opacity-100 transition-opacity duration-700"
+            style={{
+              background:
+                "radial-gradient(420px circle at var(--mouse-x) var(--mouse-y), oklch(0.78 0.14 82 / 0.18), transparent 60%)",
+            }}
+          />
           <motion.div
             className="orb h-[420px] w-[420px] -top-32 -right-32 opacity-100"
             animate={{ y: [0, 18, 0], x: [0, -10, 0] }}
             transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
           />
+
 
           <div className="relative z-10">
             <motion.div variants={fadeIn} className="flex items-center gap-3 mb-8">
@@ -160,22 +186,31 @@ export function HeroSection() {
         </div>
       </motion.div>
 
-      {/* Trust strip */}
+      {/* Trust marquee — scrolling, edge-fade */}
       <motion.div
-        className="mt-8 md:mt-10 grid grid-cols-1 sm:grid-cols-3 gap-4 py-6 border-y border-border opacity-70"
+        className="relative mt-8 md:mt-10 py-6 border-y border-border overflow-hidden"
         initial={{ opacity: 0, y: 16 }}
-        animate={{ opacity: 0.7, y: 0 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.9, duration: 0.8, ease }}
+        style={{
+          maskImage:
+            "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+          WebkitMaskImage:
+            "linear-gradient(to right, transparent, black 12%, black 88%, transparent)",
+        }}
       >
-        {["Entrega no prazo", "Pagamento via Pix", "100% Sigilo"].map((label) => (
-          <div key={label} className="flex items-center justify-center gap-3">
-            <span className="h-1 w-1 rounded-full bg-gold shrink-0" />
-            <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
-              {label}
-            </span>
-          </div>
-        ))}
+        <div className="flex gap-12 whitespace-nowrap will-change-transform animate-[marquee_28s_linear_infinite]">
+          {[...TRUST_ITEMS, ...TRUST_ITEMS, ...TRUST_ITEMS, ...TRUST_ITEMS].map((label, i) => (
+            <div key={`${label}-${i}`} className="flex items-center gap-3 shrink-0">
+              <span className="h-1.5 w-1.5 rounded-full bg-gold shrink-0" />
+              <span className="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.3em] text-muted-foreground">
+                {label}
+              </span>
+            </div>
+          ))}
+        </div>
       </motion.div>
+
     </section>
   );
 }
