@@ -5,6 +5,7 @@ import { ArrowRight, Lock, Zap, ShieldCheck, CheckCircle2 } from "lucide-react";
 import { Background } from "@/components/Background";
 import { Header } from "@/components/Header";
 import { Reveal } from "@/components/Reveal";
+import { ScrollIntro } from "@/components/ScrollIntro";
 import { listServices } from "@/lib/orders.functions";
 import { formatPriceUnit } from "@/lib/format";
 
@@ -51,6 +52,7 @@ function Index() {
   return (
     <>
       <Background />
+      <ScrollIntro name="FACILIT" />
       <Header />
 
       {/* HERO */}
