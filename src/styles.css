@@ -82,39 +82,35 @@
 
 :root {
   --radius: 0.875rem;
-  /* Emerald Prestige — esmeralda (confiança + Pix) + dourado (prestígio) sobre creme quente */
-  --background: oklch(0.985 0.012 95);
-  --foreground: oklch(0.20 0.05 160);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.20 0.05 160);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.20 0.05 160);
-  --primary: oklch(0.38 0.10 162);          /* esmeralda profunda — confiança */
-  --primary-foreground: oklch(0.985 0.012 95);
-  --secondary: oklch(0.96 0.02 150);
-  --secondary-foreground: oklch(0.25 0.07 160);
-  --muted: oklch(0.96 0.014 150);
-  --muted-foreground: oklch(0.45 0.03 160);
-  --accent: oklch(0.93 0.05 90);            /* dourado suave */
-  --accent-foreground: oklch(0.22 0.06 160);
-  --destructive: oklch(0.55 0.23 25);
-  --destructive-foreground: oklch(0.985 0.012 95);
-  --border: oklch(0.88 0.02 150);
-  --input: oklch(0.97 0.014 150);
-  --ring: oklch(0.38 0.10 162);
-  --gold: oklch(0.74 0.14 80);              /* dourado vivo */
-  --gold-soft: oklch(0.90 0.10 86);
-  --ruby: oklch(0.55 0.23 25);
-  --ruby-soft: oklch(0.92 0.06 22);
-}
-
-.dark {
-  --background: oklch(0.99 0.005 95);
+  /* Emerald Prestige — DARK: esmeralda luminosa + dourado sobre fundo profundo */
+  --background: oklch(0.16 0.018 165);
+  --foreground: oklch(0.96 0.012 95);
+  --card: oklch(0.20 0.022 165);
+  --card-foreground: oklch(0.96 0.012 95);
+  --popover: oklch(0.19 0.022 165);
+  --popover-foreground: oklch(0.96 0.012 95);
+  --primary: oklch(0.78 0.14 162);
+  --primary-foreground: oklch(0.14 0.02 165);
+  --secondary: oklch(0.24 0.025 162);
+  --secondary-foreground: oklch(0.92 0.02 95);
+  --muted: oklch(0.23 0.022 162);
+  --muted-foreground: oklch(0.72 0.025 150);
+  --accent: oklch(0.32 0.06 90);
+  --accent-foreground: oklch(0.96 0.012 95);
+  --destructive: oklch(0.62 0.24 25);
+  --destructive-foreground: oklch(0.98 0.012 95);
+  --border: oklch(0.30 0.025 162);
+  --input: oklch(0.22 0.022 162);
+  --ring: oklch(0.78 0.14 162);
+  --gold: oklch(0.82 0.15 82);
+  --gold-soft: oklch(0.70 0.12 82);
+  --ruby: oklch(0.65 0.24 22);
+  --ruby-soft: oklch(0.40 0.14 22);
 }
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { color-scheme: light; overflow-x: hidden; }
+  html { color-scheme: dark; overflow-x: hidden; }
   body {
     background-color: var(--color-background);
     color: var(--color-foreground);
