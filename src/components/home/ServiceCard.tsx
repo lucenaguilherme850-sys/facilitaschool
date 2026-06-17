@@ -1,26 +1,31 @@
 import { Link } from "@tanstack/react-router";
-import { ArrowRight } from "lucide-react";
+import { GraduationCap, BookOpen, FileText } from "lucide-react";
 import { formatPriceUnit } from "@/lib/format";
 import type { Service } from "./types";
 
-export function ServiceCard({ service }: { service: Service }) {
+const iconByIndex = [GraduationCap, BookOpen, FileText];
+
+export function ServiceCard({ service, index = 0 }: { service: Service; index?: number }) {
+  const Icon = iconByIndex[index % iconByIndex.length];
   return (
     <Link
       to="/servico/$slug"
       params={{ slug: service.slug }}
-      className="group relative block rounded-2xl bg-card shadow-card border border-border/60 p-6 hover:border-gold/60 transition-all duration-500 lift hover:shadow-gold"
+      className="bento lift group p-8 md:p-10 block relative overflow-hidden"
     >
-      <div className="aspect-[16/9] rounded-xl bg-secondary/60 border border-border/40 mb-5 grid place-items-center overflow-hidden">
-        <div className="h-14 w-14 rounded-xl bg-gold-gradient grid place-items-center shadow-gold animate-float group-hover:scale-110 transition-transform duration-500">
-          <span className="font-display text-2xl text-primary-foreground">{service.name.charAt(0)}</span>
-        </div>
+      <div className="mb-12 h-10 w-10 text-gold transition-transform duration-500 group-hover:scale-110">
+        <Icon className="h-10 w-10" strokeWidth={1.25} />
       </div>
-      <h3 className="font-display text-2xl mb-2">{service.name}</h3>
-      <p className="text-sm text-muted-foreground line-clamp-2 mb-6">{service.description}</p>
-      <div className="flex items-center justify-between pt-4 border-t border-border/50">
-        <span className="text-gold text-sm font-medium">{formatPriceUnit(service.price_cents, service.unit)}</span>
-        <span className="h-9 w-9 rounded-full border border-border/60 grid place-items-center group-hover:bg-gold group-hover:border-gold group-hover:text-primary-foreground transition-all duration-300 group-hover:translate-x-1">
-          <ArrowRight className="h-4 w-4" />
+      <h3 className="font-display text-3xl italic mb-3 text-foreground">{service.name}</h3>
+      <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-8">
+        {service.description}
+      </p>
+      <div className="flex items-center justify-between pt-6 border-t border-border">
+        <span className="text-gold text-sm font-medium tracking-tight">
+          {formatPriceUnit(service.price_cents, service.unit)}
+        </span>
+        <span className="text-xs uppercase tracking-[0.2em] text-muted-foreground group-hover:text-gold transition-colors">
+          Saber mais →
         </span>
       </div>
     </Link>
