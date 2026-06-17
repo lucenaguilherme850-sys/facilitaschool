@@ -17,7 +17,7 @@ const ITEMS = [
   {
     icon: CalendarClock,
     title: "2. Prazo",
-    desc: "Diz até que dia/hora precisa estar pronto. A gente só aceita se conseguir entregar antes.",
+    desc: "Eu analiso sua tarefa e a demanda do momento e te passo o prazo real de entrega. Só fecho se conseguir cumprir.",
   },
   {
     icon: CheckCheck,
