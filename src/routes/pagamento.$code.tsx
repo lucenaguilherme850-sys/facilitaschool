@@ -21,11 +21,10 @@ const orderQuery = (code: string) =>
   });
 
 const STATUS_META: Record<string, { label: string; tone: string; icon: typeof Clock; message: string }> = {
-  pending_payment: { label: "Aguardando pagamento", tone: "text-gold border-gold/40 bg-gold/5", icon: Clock, message: "Pague via Pix para iniciarmos seu pedido." },
-  payment_received: { label: "Pagamento recebido", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: CheckCircle2, message: "Recebemos seu Pix! Em breve começamos." },
-  paid: { label: "Pagamento confirmado", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: CheckCircle2, message: "Pagamento confirmado. Vamos começar!" },
-  in_progress: { label: "Em andamento", tone: "text-sky-400 border-sky-400/40 bg-sky-400/5", icon: Loader2, message: "Nossa equipe já está fazendo sua atividade." },
-  delivered: { label: "Entregue", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: Sparkles, message: "Tudo pronto! Sua atividade foi entregue." },
+  pending_payment: { label: "Aguardando pagamento", tone: "text-gold border-gold/40 bg-gold/5", icon: Clock, message: "Pague via Pix e envie o comprovante para iniciarmos." },
+  awaiting_review: { label: "Comprovante recebido", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: CheckCircle2, message: "Recebemos seu comprovante! Validando o pagamento." },
+  in_progress: { label: "Em andamento", tone: "text-sky-400 border-sky-400/40 bg-sky-400/5", icon: Loader2, message: "Já estamos fazendo sua atividade." },
+  completed: { label: "Concluído", tone: "text-emerald-400 border-emerald-400/40 bg-emerald-400/5", icon: Sparkles, message: "Tudo pronto! Sua atividade foi entregue." },
   cancelled: { label: "Cancelado", tone: "text-red-400 border-red-400/40 bg-red-400/5", icon: Clock, message: "Este pedido foi cancelado." },
 };
 
