@@ -33,7 +33,7 @@ export function ServiceCard({ service, index = 0 }: { service: Service; index?: 
         >
           <Icon className="h-10 w-10" strokeWidth={1.25} />
         </motion.div>
-        <h3 className="font-display text-3xl italic mb-3 text-foreground">{service.name}</h3>
+        <h3 className="font-display text-3xl italic mb-3 text-foreground whitespace-pre-line">{service.name}</h3>
         <p className="text-muted-foreground text-sm leading-relaxed line-clamp-3 mb-8">
           {service.description}
         </p>
