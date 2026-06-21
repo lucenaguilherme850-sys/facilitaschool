@@ -27,8 +27,27 @@ const cardIn: Variants = {
   show: { opacity: 1, y: 0, scale: 1, transition: { duration: 0.9, ease } },
 };
 
+// Contador determinístico: começa em 47 (21/06/2026) e cresce 5–29/dia.
+function getDailyCount(base = 47, startISO = "2026-06-21") {
+  const MS_DAY = 86_400_000;
+  const start = new Date(startISO).setUTCHours(0, 0, 0, 0);
+  const today = new Date().setUTCHours(0, 0, 0, 0);
+  const days = Math.max(0, Math.floor((today - start) / MS_DAY));
+  // PRNG determinístico por dia (mulberry32) → incremento estável 5–29
+  let total = base;
+  for (let i = 0; i < days; i++) {
+    let t = (i + 1) * 0x6d2b79f5;
+    t = Math.imul(t ^ (t >>> 15), t | 1);
+    t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+    const rnd = ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    total += 5 + Math.floor(rnd * 25); // 5..29
+  }
+  return total;
+}
+
 export function HeroSection() {
   const heroRef = useRef<HTMLDivElement>(null);
+  const dailyCount = getDailyCount();
 
   const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
     const el = heroRef.current;
