@@ -51,7 +51,7 @@ export function HeroSection() {
           ref={heroRef}
           onMouseMove={handleMouseMove}
           variants={cardIn}
-          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px] group/hero"
+          className="lg:col-span-8 bento p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] group/hero"
           style={{ ["--mouse-x" as string]: "50%", ["--mouse-y" as string]: "50%" }}
         >
           {/* Cursor spotlight */}
@@ -64,7 +64,7 @@ export function HeroSection() {
             }}
           />
           <motion.div
-            className="orb h-[420px] w-[420px] -top-32 -right-32 opacity-100"
+            className="orb h-[260px] w-[260px] sm:h-[420px] sm:w-[420px] -top-24 -right-24 sm:-top-32 sm:-right-32 opacity-100"
             animate={{ y: [0, 18, 0], x: [0, -10, 0] }}
             transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
           />
