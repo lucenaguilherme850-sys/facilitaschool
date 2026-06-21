@@ -51,7 +51,7 @@ export function HeroSection() {
           ref={heroRef}
           onMouseMove={handleMouseMove}
           variants={cardIn}
-          className="lg:col-span-8 bento p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[480px] lg:min-h-[560px] group/hero"
+          className="lg:col-span-8 bento p-6 sm:p-8 md:p-12 lg:p-16 flex flex-col justify-center relative overflow-hidden min-h-[420px] sm:min-h-[480px] lg:min-h-[560px] group/hero"
           style={{ ["--mouse-x" as string]: "50%", ["--mouse-y" as string]: "50%" }}
         >
           {/* Cursor spotlight */}
@@ -64,7 +64,7 @@ export function HeroSection() {
             }}
           />
           <motion.div
-            className="orb h-[420px] w-[420px] -top-32 -right-32 opacity-100"
+            className="orb h-[260px] w-[260px] sm:h-[420px] sm:w-[420px] -top-24 -right-24 sm:-top-32 sm:-right-32 opacity-100"
             animate={{ y: [0, 18, 0], x: [0, -10, 0] }}
             transition={{ duration: 14, repeat: Infinity, ease: "easeInOut" }}
           />
@@ -99,21 +99,21 @@ export function HeroSection() {
               Você paga via Pix e a gente entrega.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 sm:gap-4">
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }}>
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
+              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }} className="w-full sm:w-auto">
                 <Link
                   to="/"
                   hash="servicos"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gold text-primary-foreground font-semibold tracking-tight px-7 py-3.5 shadow-gold hover:bg-gold-soft transition-colors duration-300"
+                  className="inline-flex w-full sm:w-auto min-h-11 items-center justify-center gap-2 rounded-full bg-gold text-primary-foreground font-semibold tracking-tight px-7 py-3.5 shadow-gold hover:bg-gold-soft transition-colors duration-300"
                 >
                   Ver serviços
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }}>
+              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }} className="w-full sm:w-auto">
                 <Link
                   to="/"
                   hash="como-funciona"
-                  className="inline-flex items-center justify-center rounded-full border border-border text-foreground font-medium px-7 py-3.5 hover:bg-white/5 transition-colors duration-300"
+                  className="inline-flex w-full sm:w-auto min-h-11 items-center justify-center rounded-full border border-border text-foreground font-medium px-7 py-3.5 hover:bg-secondary transition-colors duration-300"
                 >
                   Como funciona →
                 </Link>
