@@ -167,7 +167,7 @@ export function HeroSection() {
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.78, type: "spring", stiffness: 320, damping: 18 }}
               >
-                +47
+                +{dailyCount}
               </motion.div>
             </div>
             <div>
