@@ -294,7 +294,29 @@ function renderField(f: ServiceField, form: Record<string, any>, setForm: (v: an
   const update = (val: any) => setForm({ ...form, [f.name]: val });
   if (f.type === "text") return <input className="ui-input" placeholder={f.placeholder} value={form[f.name] ?? ""} onChange={(e) => update(e.target.value)} maxLength={200} />;
   if (f.type === "password") return <input type="password" className="ui-input" value={form[f.name] ?? ""} onChange={(e) => update(e.target.value)} maxLength={200} />;
-  if (f.type === "number") return <input type="number" min={f.min} max={f.max} className="ui-input" value={form[f.name] ?? 1} onChange={(e) => update(Number(e.target.value))} />;
+  if (f.type === "number") return (
+    <input
+      type="number"
+      inputMode="numeric"
+      min={f.min}
+      max={f.max}
+      className="ui-input"
+      value={form[f.name] ?? ""}
+      placeholder={String(f.min ?? 1)}
+      onChange={(e) => {
+        const raw = e.target.value;
+        if (raw === "") { update(""); return; }
+        let n = Number(raw);
+        if (Number.isNaN(n)) return;
+        if (f.max != null && n > f.max) n = f.max;
+        update(n);
+      }}
+      onBlur={(e) => {
+        const n = Number(e.target.value);
+        if (!e.target.value || Number.isNaN(n) || n < (f.min ?? 1)) update(f.min ?? 1);
+      }}
+    />
+  );
   if (f.type === "select") return (
     <select className="ui-input" value={form[f.name] ?? ""} onChange={(e) => update(e.target.value)}>
       <option value="">Selecione...</option>
