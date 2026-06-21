@@ -99,21 +99,21 @@ export function HeroSection() {
               Você paga via Pix e a gente entrega.
             </motion.p>
 
-            <motion.div variants={fadeUp} className="flex flex-wrap gap-3 sm:gap-4">
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }}>
+            <motion.div variants={fadeUp} className="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4">
+              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }} className="w-full sm:w-auto">
                 <Link
                   to="/"
                   hash="servicos"
-                  className="inline-flex items-center justify-center gap-2 rounded-full bg-gold text-primary-foreground font-semibold tracking-tight px-7 py-3.5 shadow-gold hover:bg-gold-soft transition-colors duration-300"
+                  className="inline-flex w-full sm:w-auto min-h-11 items-center justify-center gap-2 rounded-full bg-gold text-primary-foreground font-semibold tracking-tight px-7 py-3.5 shadow-gold hover:bg-gold-soft transition-colors duration-300"
                 >
                   Ver serviços
                 </Link>
               </motion.div>
-              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }}>
+              <motion.div whileHover={{ scale: 1.03, y: -2 }} whileTap={{ scale: 0.97 }} transition={{ type: "spring", stiffness: 400, damping: 22 }} className="w-full sm:w-auto">
                 <Link
                   to="/"
                   hash="como-funciona"
-                  className="inline-flex items-center justify-center rounded-full border border-border text-foreground font-medium px-7 py-3.5 hover:bg-white/5 transition-colors duration-300"
+                  className="inline-flex w-full sm:w-auto min-h-11 items-center justify-center rounded-full border border-border text-foreground font-medium px-7 py-3.5 hover:bg-secondary transition-colors duration-300"
                 >
                   Como funciona →
                 </Link>
