@@ -16,11 +16,11 @@ export function Header() {
             Facilit<span className="text-gold">.</span>
           </span>
         </Link>
-        <nav className="flex items-center gap-1 sm:gap-6 text-xs sm:text-sm font-medium uppercase tracking-[0.2em] text-muted-foreground shrink-0">
+        <nav className="flex items-center gap-0 sm:gap-2 text-[11px] sm:text-sm font-medium uppercase tracking-[0.18em] sm:tracking-[0.2em] text-muted-foreground shrink-0">
           <Link
             to="/"
             hash="servicos"
-            className="tap-target inline-flex items-center px-3 rounded-lg hover:text-gold transition-colors"
+            className="tap-target inline-flex items-center px-2 sm:px-3 rounded-lg hover:text-gold transition-colors"
           >
             Serviços
           </Link>
